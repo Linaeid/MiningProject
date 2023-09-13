@@ -1,10 +1,6 @@
 # MiningProject
 
-We’ve decided to work with a dataset of employee salaries is typically driven by various goals and objectives, which may include:
- Salary data can inform recruitment and retention strategies by identifying competitive salary ranges, helping to attract and retain top talent.
-Performance Evaluation: Employee salary data can be used as a component of performance evaluations and compensation decisions.
-Predictive Analytics: Employee salary data can be used in predictive modeling to forecast future compensation trends, turnover rates, and other workforce-related factors.
-In summary, working with a dataset of employee salaries serves various purposes, ranging from ensuring fair compensation to optimizing business operations and complying with legal and ethical standards. The specific reasons for working with such data depend on the organization's goals and priorities.
+we've decided to work with the Hepatitis C Virus (HCV) dataset for Egyptian patients could have been influenced by several factors and considerations. Hepatitis C is a significant public health issue in Egypt, with a notably high prevalence rate. Researchers and healthcare professionals might choose to work with this dataset because it directly addresses a pressing health concern in the region.Also Funding and resource availability can influence research decisions. If funding was allocated for studying HCV in Egyptian patients, it would naturally lead to working with this dataset.
 
 Students names: Lina Alharbi ,shoug aljebreen,Reman Alwadiee 
 Abeer alnafaei

@@ -17,5 +17,5 @@ The dataset was sourced from the kaggle website in this URL : https://www.kaggle
 - Number of Attributes: 12
 - Number of Objects: 608
 - Type of Attributes: Numeric, Nominal,Ordinal
-- Classes names:work_year,experience_level,employment_type,job_title,salary,salary_currency,salary_in_usd,employee_residence,remote_ratio,company_location,company_size
+- Classes names:
 ```

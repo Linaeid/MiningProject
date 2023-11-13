@@ -1,0 +1,1005 @@
+Data Mining Project
+
+## Goal of Collecting this Dataset
+
+The goal of collecting a Hepatitis C Virus (HCV) dataset To uncover novel knowledge and insights about HCV in Egyptian patients that may not be immediately apparent by understanding the progress of HCV in infected individuals. Data mining plays an essential role in the knowledge discovery process techniques which can be used to analyze how the disease evolves over time and what factors contribute to its progression.
+
+# Dataset
+
+The dataset was sourced from the uci website in this URL : <http://archive.ics.uci.edu/dataset/503/hepatitis+c+virus+hcv+for+egyptian+patients>
+
+# General Information
+
+\- Number of Attributes: 28
+
+\- Number of Objects: 1385
+
+\- Type of Attributes: Numeric, Nominal,Ordinal
+
+-The goal of collecting a Hepatitis C Virus (HCV) dataset is to uncover novel knowledge and insights about HCV in Egyptian patients that may not be immediately apparent. This dataset serves a dual purpose: First, it allows us to classify patients into different categories based on various factors, providing a deeper understanding of the disease's progression and its impact on individuals. Second, through clustering techniques, we aim to identify distinct patient groups with similar characteristics, allowing for the development of personalized treatment strategies and better disease management. Data mining techniques play an essential role in the knowledge discovery process, helping us analyze the disease's evolution over time and determine the factors contributing to its progression and impact on different patient groups
+
+\- Features names:Age,Gender,BMI(Body Mass Index),Nausea/Vomting, Diarrhea, Fever, Headache,Fatigue & generalized bone ache, Jaundice, Epigastric pain, WBC(White blood cells),RBC(Red blood cells),HGB(Hemoglobin),Plat(Platelets), AST 1(aspartate transaminase ratio),ALT1(alanine transaminase ratio 1 week),ALT4(alanine transaminase ratio 4 weeks), ALT 12(alanine transaminase ratio 12 weeks), ALT 24(alanine transaminase ratio 24 weeks), ALT 36(alanine transaminase ratio 36 weeks ),ALT 48(alanine transaminase ratio 48 weeks), ALT after 24 w(after 24 warnings alanine transaminase ratio 24 weeks), RNA Base, RNA 4, RNA 12, RNA EOT(RNA end-of-treatment),RNA EF(RNA Elongation Factor), Baseline histological Grading, Baselinehistological staging.
+
+```{r}
+# Install and load necessary packages
+dataset <-read.csv('HCV-Egy-Data.csv')
+
+
+# Install and load necessary packages
+if(!require(Hmisc)){
+ install.packages("Hmisc")  # Install the Hmisc package        
+    }
+library("Hmisc")    # Load the Hmisc package
+```
+
+```{r}
+ describe(dataset)
+
+```
+
+# Data Structure
+
+the function str will help to understand the internal structure of the project Data name, variables and objects numbers, Dimension, Data Values (provided a preview of the first few data values for each variable)
+
+```{r}
+# Explore dataset structure
+str(dataset)
+
+```
+
+```{r}
+# Display for first few rows
+head(dataset)
+```
+
+```{r}
+# Check for missing values
+sum(is.na(dataset))
+```
+
+No missing values in the data set
+
+# Summary statistics
+
+we choose three variables to show the Summary statistics for which (Age, Body mass index,RNA end-of-treatment )
+
+```{r}
+# Summary statistics for numerical variables
+summary(dataset[c("Age", "BMI", "RNA.EOT")])
+```
+
+These statistics shows that for 'Age' : -The minimum infected age is 32 years. -The median age (50th percentile) is 46 years, meaning that 50% of the individuals are 46 years old or younger. -The mean age is approximately 46.32 years, providing the average age in the dataset. -The maximum age is 61 years, representing the oldest age in the dataset
+
+for 'BMI' : -The minimum BMI is 22.
+
+-The median BMI is 29, indicating that 50% of the individuals have a BMI of 29 or lower. -The mean BMI is approximately 28.61, providing the average BMI in the dataset.
+
+-The maximum BMI is 35, representing the highest BMI in the dataset
+
+for 'RNA' : -The minimum HCV RNA level at the end of treatment is 5.
+
+-The median HCV RNA level is 251,376, meaning that 50% of the individuals have an HCV RNA level of 251,376 or lower at the end of treatment. -The mean HCV RNA level is approximately 287,660, providing the average HCV RNA level at the end of treatment.
+
+-The maximum HCV RNA level at the end of treatment is 808,450, representing the highest value in the dataset.
+
+# Class Label
+
+The class label "Baselinehistological.staging" categorizes patients into four distinct stages, each representing a different level of the condition under study. These stages provide valuable insights into the distribution of patients across the disease's progression. The pie chart below illustrates the distribution of patients among these stages:
+
+```{r}
+
+if(!require(vcd)){
+ install.packages("vcd")  # Install the Hmisc package        
+    }
+if(!require(grid)){
+ install.packages("grid")  # Install the Hmisc package        
+    }
+
+
+```
+
+```{r}
+
+# Read the data from the CSV file
+data <-read.csv('HCV-Egy-Data.csv')
+
+
+# Create the contingency table
+contingency_table <- table(data$Baselinehistological.staging)
+
+# Calculate percentages
+percentages <- prop.table(contingency_table) * 100
+
+# Round percentages to 3 decimal places
+percentages <- round(percentages, 3)
+
+# Create labels for the pie chart
+labels <- paste0(names(contingency_table), '\n', percentages, '%')
+
+
+# Create the pie chart
+pie(contingency_table, labels = labels, main = "Patients based on the stage")
+
+# Load necessary libraries
+library(vcd)
+
+# Create a mosaic plot for 'Baselinehistological.staging' by 'Gender'
+mosaic(~ Baselinehistological.staging + Gender, data = dataset, main = "Mosaic Plot: Staging by Gender")
+
+
+
+```
+
+-   **Stage 1 (24.26%):** The lowest stage, comprising nearly a quarter of the patient population, represents those individuals who are at the early or milder phase of the disease. This stage may include patients with minimal or mild pathological changes.
+
+-   **Stage 2 (23.971%):** The second stage, at just under 24%, continues to indicate a substantial portion of the patient population. Patients in this stage may exhibit a progression of the condition compared to Stage 1, but it is still considered relatively mild.
+
+-   **Stage 3 (25.623%):** Stage 3, representing over a quarter of the patients, signifies a substantial portion of the population. Patients in this stage may have a more advanced level of the condition, possibly with moderate pathological changes, indicating a significant disease burden.
+
+-   **Stage 4 (26.137%):** Finally, Stage 4, with slightly over a quarter of the patients, indicates a significant proportion of individuals at an advanced stage of the condition. Patients in this stage may exhibit severe pathological changes, reflecting a higher disease severity level.
+
+Furthermore;
+
+In the mosaic plot depicting the relationship between 'Baselinehistological.staging' and 'Gender,' we observe a difference in the diagnosis patterns between men and women, particularly in stages 2 and 3.
+
+In stage 3, it becomes evident that women were the most frequently diagnosed, while this stage had the lowest diagnosis rate among men. Stage 2 showed a similar trend, with women having the highest diagnosis rate, while men had the lowest. In contrast, stage 1 had nearly identical diagnosis rates for both genders, same was for stage 4.
+
+These findings highlight distinct gender-based disparities in the diagnosis of different stages. Women seem to be more frequently diagnosed in the later stages, whereas men exhibit different patterns, with a relatively higher prevalence in stage 1 and 4. The mosaic plot provides a clear visual representation of these discrepancies in diagnosis patterns between men and women across different disease stages.
+
+# Histogram for 'Age'
+
+shows that a peak in HCV virus infections among individuals aged 32 to 35, indicates that this specific age group is more susceptible to the virus.and comes after them who aged 53 to 55. #The box plot indicates that men are infected with the virus slightly more than women, with a difference of around 0.2% in the dataset. This translates to approximately 19 more infected individuals among men compared to women.
+
+```{r}
+# Histogram for a numerical variable 'Age'
+hist(dataset$Age)
+
+#Boxplot for 'Age' by 'Gender'
+boxplot(Age ~ Gender, data = dataset)
+
+
+```
+
+```{r}
+if(!require(dplyr)){
+ install.packages("dplyr")  # Install the dplyr package        
+    }
+library("dplyr")    # Load the dplyr package
+```
+
+A pie chart that shows patients who were suffering from Headache
+
+```{r}
+
+# Read the data from the CSV file
+data <-read.csv('HCV-Egy-Data.csv')
+
+
+# Create the contingency table
+contingency_table <- table(data$Headache)
+
+
+# Calculate percentages
+percentages <- prop.table(contingency_table) * 100
+
+# Round percentages to 3 decimal places
+percentages <- round(percentages, 3)
+
+# Create labels for the pie chart
+labels <- paste0(names(contingency_table), '\n', percentages, '%')
+
+# Create the pie chart
+pie(contingency_table, labels = labels, main = "Patients who suffer from Headache")
+
+```
+
+A pie chart that shows patients who were suffering from Fever
+
+```{r}
+# Read the data from the CSV file
+data <-read.csv('HCV-Egy-Data.csv')
+
+# Create a table of the 'Fever' column
+tab <- table(data$Fever)
+
+# Calculate percentages
+percentages <- prop.table(tab) * 100
+
+# Round percentages to 3 decimal places
+percentages <- round(percentages, 3)
+
+# Create labels for the pie chart
+labels <- paste0(names(tab), '\n', percentages, '%')
+
+# Create the pie chart
+pie(tab, labels = labels, main = "Patients who suffer from Fever")
+```
+
+# In the pie charts
+
+it's evident that 50% of individuals infected with HCV are experiencing headaches. Additionally, the data reveals that 51.5% of individuals infected by the virus are experiencing fever. This high percentage indicates that both fever and headache are common symptoms associated with HCV infection
+
+```{r}
+# Print the dimensions of the dataset
+dim(dataset)
+
+# Remove rows with missing values and print new dimensions
+dataset = na.omit(dataset)
+dim(dataset)
+```
+
+#Detecting outliers using boxplots
+
+Outliers in a database are data points that stand out from the rest and don't follow the usual pattern. They can cause problems in data analysis by making the results inaccurate or misleading. First, we identify all outliers for the numeric columns. Second, we deleted rows containing outliers. In our database we have 4 rows containing outliers.
+
+```{r}
+# Checking for outliers in various columns
+boxplot.stats(dataset$Age)$out
+boxplot.stats(dataset$BMI)$out
+boxplot.stats(dataset$WBC)$out
+boxplot.stats(dataset$RBC)$out
+boxplot.stats(dataset$HGB)$out
+boxplot.stats(dataset$Plat)$out
+boxplot.stats(dataset$AST.1)$out
+boxplot.stats(dataset$ALT.1)$out
+boxplot.stats(dataset$ALT4)$out
+boxplot.stats(dataset$ALT.12)$out
+boxplot.stats(dataset$ALT.24)$out
+boxplot.stats(dataset$ALT.36)$out
+boxplot.stats(dataset$ALT.48)$out
+boxplot.stats(dataset$ALT.after.24.w)$out
+boxplot.stats(dataset$RNA.Base)$out
+boxplot.stats(dataset$RNA.4)$out
+boxplot.stats(dataset$RNA.12)$out
+boxplot.stats(dataset$RNA.EOT)$out
+boxplot.stats(dataset$RNA.EF)$out
+boxplot.stats(dataset$Baseline.histological.Grading)$out
+
+
+```
+
+```{r}
+# Removing outliers
+# Remove outliers in the 'ALT.after.24.w' column
+outliers <- boxplot(dataset$ALT.after.24.w, plot = FALSE)$out
+dataset <- dataset[-which(dataset$ALT.after.24.w %in% outliers), ]
+boxplot.stats(dataset$ALT.after.24.w)$out
+
+# Remove outliers in the 'RNA.12' column
+outliers <- boxplot(dataset$RNA.12, plot = FALSE)$out
+dataset <- dataset[-which(dataset$RNA.12 %in% outliers), ]
+boxplot.stats(dataset$RNA.12)$out
+```
+
+# Normalization
+
+When normalizing our dataset using the z-score, it's important to note that this method does not inherently define a specific range for the transformed data. Instead, its purpose is to standardize the data by centering it around a mean of zero and scaling it to achieve a standard deviation of one. This standardization process facilitates comparisons between variables and aids in data analysis.
+
+```{r}
+
+# Define a Z-normalization function
+normalize <- function(x) {return ((x - mean(x)) / sd(x))}
+```
+
+```{r}
+# Apply normalization to selected columns
+dataset$BMI = normalize(dataset$BMI)
+dataset$WBC = normalize(dataset$WBC)
+dataset$RBC = normalize(dataset$RBC)
+dataset$HGB = normalize(dataset$HGB)
+dataset$Plat = normalize(dataset$Plat)
+dataset$AST.1 = normalize(dataset$AST.1)
+dataset$ALT.1 = normalize(dataset$ALT.1)
+dataset$ALT4 = normalize(dataset$ALT4)
+dataset$ALT.12 = normalize(dataset$ALT.12)
+dataset$ALT.24 = normalize(dataset$ALT.24)
+dataset$ALT.36 = normalize(dataset$ALT.36)
+dataset$ALT.48 = normalize(dataset$ALT.48)
+dataset$ALT.after.24.w= normalize(dataset$ALT.after.24.w)
+dataset$RNA.Base = normalize(dataset$RNA.Base)
+dataset$RNA.4 = normalize(dataset$RNA.4)
+dataset$RNA.12 = normalize(dataset$RNA.12)
+dataset$RNA.EOT = normalize(dataset$RNA.EOT)
+dataset$RNA.EF = normalize(dataset$RNA.EF)
+```
+
+# Encoding for binary coulmns
+
+```{r}
+dataset$Gender <- factor(dataset$Gender,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Fever <- factor(dataset$Fever,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Nausea.Vomting <- factor(dataset$Nausea.Vomting,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Headache <- factor(dataset$Headache,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Diarrhea <- factor(dataset$Diarrhea,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Fatigue...generalized.bone.ache <- factor(dataset$Fatigue...generalized.bone.ache,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Jaundice <- factor(dataset$Jaundice,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Epigastric.pain <- factor(dataset$Epigastric.pain,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Baseline.histological.Grading <- factor(dataset$Baseline.histological.Grading,levels = c("3", "4","5" ,"6" ,"7" ,"8" ,"9" ,"10" , "11" , "12" , "13","14" ,"15" ,"16"), labels = c("3", "4","5" ,"6" ,"7" ,"8" ,"9" ,"10" , "11" , "12" , "13","14" ,"15" ,"16"))
+dataset$Baselinehistological.staging <- factor(dataset$Baselinehistological.staging,levels = c("1", "2","3" ,"4" ), labels = c("1", "2","3" ,"4" ))
+```
+
+#Discretization
+
+We used discretization in our dataset by dividing the continuous age values into six equal-width interval categories ([32,37], [37,42], [42,47], [47,52],[52,57) and [57,62), we were able to transform the continuous age values into discrete intervals. The age data will be easier to understand and utilize for classification and other analytical methods in our model.
+
+```{r}
+# Discretize the 'Age' column into intervals
+dataset$Age = cut(dataset$Age, breaks = seq(32, 62, by = 5), right = FALSE)
+```
+
+```{r}
+print(dataset)
+
+```
+
+```{r}
+if(!require(caret)){
+install.packages("caret")  # Install the caret package
+    }
+
+library(caret)    # Load the caret package
+```
+
+# Calculate the correlation between 'Baselinehistological.staging' and other columns
+
+```{r}
+dataset <-read.csv("C:/Users/riman/OneDrive/Documents/HCV-Egy-Data.csv")
+
+cor(dataset$Baselinehistological.staging, dataset$Gender)
+cor(dataset$Baselinehistological.staging, dataset$BMI)
+cor(dataset$Baselinehistological.staging, dataset$Diarrhea)
+cor(dataset$Baselinehistological.staging, dataset$Fever)
+cor(dataset$Baselinehistological.staging, dataset$Headache)
+cor(dataset$Baselinehistological.staging, dataset$Jaundice)
+cor(dataset$Baselinehistological.staging, dataset$Epigastric.pain)
+cor(dataset$Baselinehistological.staging, dataset$WBC)
+cor(dataset$Baselinehistological.staging, dataset$RBC)
+cor(dataset$Baselinehistological.staging, dataset$HGB)
+cor(dataset$Baselinehistological.staging, dataset$Plat)
+cor(dataset$Baselinehistological.staging, dataset$AST.1)
+cor(dataset$Baselinehistological.staging, dataset$ALT4)
+cor(dataset$Baselinehistological.staging, dataset$ALT.12)
+cor(dataset$Baselinehistological.staging, dataset$ALT.24)
+cor(dataset$Baselinehistological.staging, dataset$ALT.36)
+cor(dataset$Baselinehistological.staging, dataset$ALT.48)
+cor(dataset$Baselinehistological.staging, dataset$ALT.after.24.w)
+cor(dataset$Baselinehistological.staging, dataset$RNA.Base)
+cor(dataset$Baselinehistological.staging, dataset$RNA.4)
+cor(dataset$Baselinehistological.staging, dataset$RNA.12)
+cor(dataset$Baselinehistological.staging, dataset$RNA.EOT)
+cor(dataset$Baselinehistological.staging, dataset$RNA.EF)
+cor(dataset$Baselinehistological.staging, dataset$Baseline.histological.Grading)
+```
+
+Based on the results of our calculations using the correlation coefficient, we have determined that there are no highly correlated columns in our dataset. Therefore, there is no need to remove any features.
+
+# Recursive Feature elimination
+
+Recursive Feature elimination(RFE) is a method to choose a subset of features. It starts with all the features and removes feature with lowest score at each iteration. It trains with smaller and smaller subset of features and find the best set of features.
+
+```{r}
+# Create an empty data frame to store attribute names and their p-values
+results <- data.frame(Attribute = character(0), p_value = numeric(0))
+
+# Get the column names of the dataset
+column_names <- colnames(dataset)
+
+# Perform chi-square test for each attribute
+for (attribute in column_names) {
+  if (attribute != "Baselinehistological.staging") {
+    # Create a contingency table
+    contingency_table <- table(dataset[[attribute]], dataset$Baselinehistological.staging)
+    
+    # Perform chi-square test
+    result <- chisq.test(contingency_table)
+    
+
+    
+    # Print the attribute name and the result
+    cat("Attribute:", attribute, "\n")
+    print(result)
+    cat("\n")
+  
+
+    # Store the attribute name and its p-value
+    results <- rbind(results, data.frame(Attribute = attribute, p_value = result$p.value))
+  }
+}
+
+# Sort the results in ascending order of p-values
+sorted_results <- results[order(results$p_value), ]
+
+# Select the lowest 5 features
+lowest_5_features <- head(sorted_results, 5)
+
+# Display the lowest 5 features
+print(lowest_5_features)
+
+```
+
+```{r}
+# Load the ggplot2 library
+
+library(ggplot2)
+
+# Create the bar plot
+ggplot(data = lowest_5_features, aes(x = Attribute, y = p_value)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  labs(title = "P-values of the Lowest 5 Features",
+       x = "Attribute",
+       y = "P-value") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = scales::scientific_format())  # Optional: Use scientific notation for y-axis labels
+
+# Save the plot to a file (e.g., a PNG image)
+ggsave("pvalue_bar_plot.png", plot = last_plot(), width = 10, height = 6)
+```
+
+P-values of the Lowest 5 Features
+
+This bar plot visually depicts the statistical significance of five attributes in relation to the "Baselinehistological.staging" variable. These attributes have been identified due to their relatively low p-values, suggesting a potential association with "Baselinehistological.staging."
+
+Firstly, "Gender" shows a p-value of 0.0832, indicating moderate statistical significance, hinting at a possible link between gender and baseline histological staging. "Epigastric Pain" follows with a p-value of 0.0876, suggesting that it may be associated with the staging. "Nausea/Vomiting" exhibits a p-value of 0.1622, indicating a moderate level of significance, hinting at a potential connection. "Jaundice" has a p-value of 0.2990, implying that it might be linked to the staging, albeit with less statistical significance. Lastly, "ALT.1" shows a p-value of 0.3166, suggesting that ALT.1 levels may have some connection with the baseline histological staging.
+
+# Classification
+
+```{r}
+# Load necessary libraries
+if(!require(party)){
+ install.packages("party")  # Install the Hmisc package        
+    }
+library(party)
+
+if(!require(rpart)){
+ install.packages("rpart")  # Install the Hmisc package        
+    }
+
+```
+
+# tree using the CART (Classification and Regression Trees) algorithm
+
+First tree splits the dataset into training (70%) and testing (30%) sets.
+
+```{r}
+# Set the random seed for reproducibility
+set.seed(1)
+
+dataset <- as.data.frame(lapply(dataset, as.factor))
+
+
+# 1. Split the dataset into two subsets: Training (70%) and Testing (30%)
+ind <- sample(2, nrow(dataset), replace = TRUE, prob = c(0.7, 0.3))
+trainingData <- dataset[ind == 1, ]
+testingData <- dataset[ind == 2, ]
+
+# 2. Determine the predictor attributes and the class label attribute (the formula)
+library(rpart)
+
+myFormula <- Baselinehistological.staging ~  Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+
+# 3. Build a decision tree using the training set and specify the maximum number of splits
+max_splits <- 30  # Specify the maximum number of splits
+dataset.rpart <- rpart(myFormula, data = trainingData, control = rpart.control(maxdepth = max_splits))
+
+# Predict the class labels for the training data
+predicted_train <- as.factor(predict(dataset.rpart, newdata = trainingData, type = "class"))
+
+# Ensure both vectors have the same levels
+predicted_train <- factor(predicted_train, levels = levels(trainingData$Baselinehistological.staging))
+
+# Check the prediction against the actual class labels
+confusion_matrix <- table(predicted_train, trainingData$Baselinehistological.staging)
+
+# Display the confusion matrix
+print(confusion_matrix)
+
+# 4. Print and plot the tree
+# Display complexity parameter information
+printcp(dataset.rpart)
+plot(dataset.rpart, uniform = TRUE, main = "Decision Tree")
+text(dataset.rpart, use.n = TRUE)
+
+# Predict the class labels for the testing data
+predicted_test <- as.factor(predict(dataset.rpart, newdata = testingData, type = "class"))
+
+# Ensure both vectors have the same levels
+predicted_test <- factor(predicted_test, levels = levels(testingData$Baselinehistological.staging))
+
+# Check the prediction against the actual class labels for testing data
+confusion_matrix_test <- table(predicted_test, testingData$Baselinehistological.staging)
+
+# Display the confusion matrix for testing data
+print(confusion_matrix_test)
+
+# Calculate accuracy for testing data
+accuracy_test <- sum(diag(confusion_matrix_test)) / sum(confusion_matrix_test)
+cat("Accuracy on Testing Data:", accuracy_test, "\n")
+
+```
+
+
+second tree splits the dataset into training (60%) and testing (40%) sets.
+
+```{r}
+
+
+# Set the random seed for reproducibility
+set.seed(1)
+
+dataset <- as.data.frame(lapply(dataset, as.factor))
+
+
+# 1. Split the dataset into two subsets: Training (60%) and Testing (40%)
+ind <- sample(2, nrow(dataset), replace = TRUE, prob = c(0.6, 0.4))
+trainingData <- dataset[ind == 1, ]
+testingData <- dataset[ind == 2, ]
+
+# 2. Determine the predictor attributes and the class label attribute (the formula)
+library(rpart)
+
+myFormula <- Baselinehistological.staging ~  Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+
+# 3. Build a decision tree using the training set and specify the maximum number of splits
+max_splits <- 30  # Specify the maximum number of splits
+dataset.rpart <- rpart(myFormula, data = trainingData, control = rpart.control(maxdepth = max_splits))
+
+# Predict the class labels for the training data
+predicted_train <- as.factor(predict(dataset.rpart, newdata = trainingData, type = "class"))
+
+# Ensure both vectors have the same levels
+predicted_train <- factor(predicted_train, levels = levels(trainingData$Baselinehistological.staging))
+
+# Check the prediction against the actual class labels
+confusion_matrix <- table(predicted_train, trainingData$Baselinehistological.staging)
+
+# Display the confusion matrix
+print(confusion_matrix)
+
+# Adjust plot margins
+par(mar = c(2, 4, 2, 4))
+
+# Display complexity parameter information
+printcp(dataset.rpart)
+
+# Plot the decision tree with uniform spacing
+plot(dataset.rpart, uniform = TRUE, main = "Decision Tree")
+text(dataset.rpart, use.n = TRUE)
+
+# Predict the class labels for the testing data
+predicted_test <- as.factor(predict(dataset.rpart, newdata = testingData, type = "class"))
+
+# Ensure both vectors have the same levels
+predicted_test <- factor(predicted_test, levels = levels(testingData$Baselinehistological.staging))
+
+# Check the prediction against the actual class labels for testing data
+confusion_matrix_test <- table(predicted_test, testingData$Baselinehistological.staging)
+
+# Display the confusion matrix for testing data
+print(confusion_matrix_test)
+
+# Calculate accuracy for testing data
+accuracy_test <- sum(diag(confusion_matrix_test)) / sum(confusion_matrix_test)
+cat("Accuracy on Testing Data:", accuracy_test, "\n")
+```
+
+third tree splits the dataset into training (50%) and testing (50%) sets.
+
+```{r}
+# Load necessary libraries
+install.packages("party")
+library(party)
+
+# Set the random seed for reproducibility
+set.seed(1)
+
+dataset <- as.data.frame(lapply(dataset, as.factor))
+
+
+# 1. Split the dataset into two subsets: Training (50%) and Testing (50%)
+ind <- sample(2, nrow(dataset), replace = TRUE, prob = c(0.5, 0.5))
+trainingData <- dataset[ind == 1, ]
+testingData <- dataset[ind == 2, ]
+
+# 2. Determine the predictor attributes and the class label attribute (the formula)
+library(rpart)
+
+myFormula <- Baselinehistological.staging ~  Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+
+# 3. Build a decision tree using the training set and specify the maximum number of splits
+max_splits <- 30  # Specify the maximum number of splits
+dataset.rpart <- rpart(myFormula, data = trainingData, control = rpart.control(maxdepth = max_splits))
+
+# Predict the class labels for the training data
+predicted_train <- as.factor(predict(dataset.rpart, newdata = trainingData, type = "class"))
+
+# Ensure both vectors have the same levels
+predicted_train <- factor(predicted_train, levels = levels(trainingData$Baselinehistological.staging))
+
+# Check the prediction against the actual class labels
+confusion_matrix <- table(predicted_train, trainingData$Baselinehistological.staging)
+
+# Display the confusion matrix
+print(confusion_matrix)
+
+# Adjust plot margins
+par(mar = c(2, 4, 2, 4))
+
+# Display complexity parameter information
+printcp(dataset.rpart)
+
+# Plot the decision tree with uniform spacing
+plot(dataset.rpart, uniform = TRUE, main = "Decision Tree")
+text(dataset.rpart, use.n = TRUE)
+
+# Predict the class labels for the testing data
+predicted_test <- as.factor(predict(dataset.rpart, newdata = testingData, type = "class"))
+
+# Ensure both vectors have the same levels
+predicted_test <- factor(predicted_test, levels = levels(testingData$Baselinehistological.staging))
+
+# Check the prediction against the actual class labels for testing data
+confusion_matrix_test <- table(predicted_test, testingData$Baselinehistological.staging)
+
+# Display the confusion matrix for testing data
+print(confusion_matrix_test)
+
+# Calculate accuracy for testing data
+accuracy_test <- sum(diag(confusion_matrix_test)) / sum(confusion_matrix_test)
+cat("Accuracy on Testing Data:", accuracy_test, "\n")
+```
+
+#NOTE: The algorithm runs slowly in both the Notebook and Jupyter environments. However, pictures of the tree have been attached outside the file on GitHub.
+
+These decision trees uses the information gain measure to split the data at each node. The information gain is a measure of how much the uncertainty in the target variable is reduced by splitting the data on a given feature. A higher information gain indicates that the feature is more informative about the target variable. The trees start by splitting the data based on the Gender feature. If the patient is male, the tree then splits the data based on the ALT.1 feature. If the ALT.1 level is greater than 30, the tree predicts that the patient has Baselinehistological.staging 3, otherwise the tree predicts that the patient has Baselinehistological.staging 2.
+
+If the patient is female, the tree then splits the data based on the Epigastric pain feature. If the patient has epigastric pain, the tree then splits the data based on the Nausea/Vomiting feature. If the patient has nausea/vomiting, the tree predicts that the patient has Baselinehistological.staging 2, otherwise the tree predicts that the patient has Baselinehistological.staging 1.
+
+If the patient does not have epigastric pain, the trees predict that the patient has Baselinehistological.staging 1.The output of the decision trees is the predicted Baselinehistological.staging for a given patient. The prediction is based on the patient's values for the predictor features.The decision trees you provided is a good model for classifying patients with HCV based on their Baselinehistological.staging. The tree has a good accuracy on the testing data.
+
+
+# decision tree using the ID3 algorithm uning Ingormation gain
+
+First tree splits the dataset into training (70%) and testing (30%) sets.
+
+```{r}
+# Specify the formula based on your dataset structure
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice
+
+set.seed(1234)
+
+# Split the dataset into training and testing sets (70% training, 30% testing)
+ind <- sample(2, nrow(dataset), replace = TRUE, prob = c(0.7, 0.3))
+trainingData <- dataset[ind == 1, ]
+testingData <- dataset[ind == 2, ]
+
+# Create a decision tree using the ID3 algorithm (rpart)
+info_gain_tree <- rpart(myFormula, data = trainingData, method = "class")
+
+# Plot the decision tree
+plot(info_gain_tree, uniform = TRUE, main = "Decision Tree", box.col = "lightblue", branch.lty = 1)
+text(info_gain_tree, use.n = TRUE)
+
+
+# Evaluate the decision tree on testing data
+predicted_labels <- predict(info_gain_tree, newdata = testingData, type = "class")
+confusion_matrix <- table(predicted_labels, testingData$Baselinehistological.staging)
+
+# Display confusion matrix
+print("Confusion Matrix:")
+print(confusion_matrix)
+
+# Calculate accuracy
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+print(paste("Accuracy:", accuracy))
+```
+The decision tree uses the information gain measure to split the data at each node. The information gain is a measure of how much the uncertainty in the target variable is reduced by splitting the data on a given feature.
+
+This tree is a classification tree that is used to predict the Baselinehistological.staging of a patient with HCV. The tree is built using the following features: Gender, Epigastric pain, Nausea/Vomiting, ALT.1, and Jaundice. 
+ 
+The tree starts by splitting the data based on the Gender feature. If the patient is male, the tree then splits the data based on the ALT.1 feature. If the ALT.1 level is greater than 30, the tree predicts that the patient has Baselinehistological.staging 3, otherwise the tree predicts that the patient has Baselinehistological.staging 2. 
+ 
+If the patient is female, the tree then splits the data based on the Epigastric pain feature. If the patient has epigastric pain, the tree then splits the data based on the Nausea/Vomiting feature. If the patient has nausea/vomiting, the tree predicts that the patient has Baselinehistological.staging 2, otherwise the tree predicts that the patient has Baselinehistological.staging 1. 
+ 
+If the patient does not have epigastric pain, the tree predicts that the patient has Baselinehistological.staging 1   The confusion matrix shows the number of correct and incorrect predictions made by the decision tree on the testing data.
+
+
+Second tree splits the dataset into training (60%) and testing (40%) sets.
+
+```{r}
+# Specify the formula based on your dataset structure
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice
+
+set.seed(1234)
+
+# Split the dataset into training and testing sets (60% training, 40% testing)
+ind <- sample(2, nrow(dataset), replace = TRUE, prob = c(0.6, 0.4))
+trainingData <- dataset[ind == 1, ]
+testingData <- dataset[ind == 2, ]
+
+# Create a decision tree using the ID3 algorithm (rpart)
+info_gain_tree <- rpart(myFormula, data = trainingData, method = "class")
+
+# Plot the decision tree
+plot(info_gain_tree, uniform = TRUE, main = "Decision Tree", box.col = "lightblue", branch.lty = 1)
+text(info_gain_tree, use.n = TRUE)
+
+
+# Evaluate the decision tree on testing data
+predicted_labels <- predict(info_gain_tree, newdata = testingData, type = "class")
+confusion_matrix <- table(predicted_labels, testingData$Baselinehistological.staging)
+
+# Display confusion matrix
+print("Confusion Matrix:")
+print(confusion_matrix)
+
+# Calculate accuracy
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+print(paste("Accuracy:", accuracy))
+```
+The decision tree uses the information gain measure to split the data at each node. The information gain is a measure of how much the uncertainty in the target variable is reduced by splitting the data on a given feature.The tree starts by splitting the data based on the Gender feature. If the patient is male, the tree then splits the data based on the ALT.1 feature. If the ALT.1 level is greater than 30, the tree predicts that the patient has Baselinehistological.staging 3, otherwise the tree predicts that the patient has Baselinehistological.staging 2.
+
+If the patient is female, the tree then splits the data based on the Epigastric pain feature. If the patient has epigastric pain, the tree then splits the data based on the Nausea/Vomiting feature. If the patient has nausea/vomiting, the tree predicts that the patient has Baselinehistological.staging 2, otherwise the tree predicts that the patient has Baselinehistological.staging 1.
+
+If the patient does not have epigastric pain, the tree predicts that the patient has Baselinehistological.staging 1.The output of the decision tree is the predicted Baselinehistological.staging for a given patient. The prediction is based on the patient's values for the predictor features.
+The accuracy of the decision tree on the testing data is 79%. This means that the decision tree correctly predicted the Baselinehistological.staging for 79% of the patients in the testing data
+
+
+Third tree splits the dataset into training (50%) and testing (50%) sets.
+
+```{r}
+# Specify the formula based on your dataset structure
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice
+
+set.seed(1234)
+
+# Split the dataset into training and testing sets (50% training, 50% testing)
+ind <- sample(2, nrow(dataset), replace = TRUE, prob = c(0.5, 0.5))
+trainingData <- dataset[ind == 1, ]
+testingData <- dataset[ind == 2, ]
+
+# Create a decision tree using the ID3 algorithm (rpart)
+info_gain_tree <- rpart(myFormula, data = trainingData, method = "class")
+
+# Plot the decision tree
+plot(info_gain_tree, uniform = TRUE, main = "Decision Tree", box.col = "lightblue", branch.lty = 1)
+text(info_gain_tree, use.n = TRUE)
+
+
+# Evaluate the decision tree on testing data
+predicted_labels <- predict(info_gain_tree, newdata = testingData, type = "class")
+confusion_matrix <- table(predicted_labels, testingData$Baselinehistological.staging)
+
+# Display confusion matrix
+print("Confusion Matrix:")
+print(confusion_matrix)
+
+# Calculate accuracy
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+print(paste("Accuracy:", accuracy))
+```
+the CART (Classification and Regression Trees) algorithm to construct a decision tree for predicting the variable 'Baselinehistological.staging' based on a set of predictor variables. The dataset is initially split into training and testing sets, with a random 50-50 division. The decision tree uses the information gain measure to split the data at each node. The information gain is a measure of how much the uncertainty in the target variable is reduced by splitting the data on a given feature, and the resulting tree is visualized, showcasing the hierarchical structure of decision-making nodes. The analysis then extends to evaluating the model's performance on the testing data. A confusion matrix is generated to detail the number of correct and incorrect predictions for each class, and the overall accuracy is computed as a measure of the model's effectiveness. Beyond accuracy, further insights can be gleaned by exploring additional metrics such as precision, recall, and F1-score. Consideration of these metrics and potential hyperparameter tuning can contribute to a more comprehensive assessment of the decision tree's predictive capabilities.
+
+
+# tree using the default method (ANOVA) using GINI
+
+First tree splits the dataset into training (70%) and testing (30%) sets.
+
+```{r}
+library(rpart)
+
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(2, nrow(dataset), replace = TRUE, prob = c(7, 3))
+trainingData <- dataset[ind == 1, ]
+testingData <- dataset[ind == 2, ]
+
+# Specify your formula
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice
+
+# Create a decision tree using the default method (ANOVA)
+gini_tree <- rpart(myFormula, data = trainingData)
+
+# Plot the decision tree
+plot(gini_tree, uniform = TRUE, main = "Decision Tree (Default Method)", box.col = "lightblue", branch.lty = 1)
+text(gini_tree, use.n = TRUE)
+
+# Evaluate the decision tree on testing data
+predicted_labels <- predict(gini_tree, newdata = testingData, type = "class")
+confusion_matrix <- table(predicted_labels, testingData$Baselinehistological.staging)
+
+# Display confusion matrix
+print("Confusion Matrix:")
+print(confusion_matrix)
+
+# Calculate accuracy
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+print(paste("Accuracy:", accuracy))
+```
+The decision tree uses the gini index measure to split the data at each node. The gini index is a measure of the heterogeneity of a dataset. A lower gini index indicates a more homogeneous dataset.                            
+
+The tree starts by splitting the data based on the Gender feature. If the patient is male, the tree then splits the data based on the ALT.1 feature. If the ALT.1 level is greater than 30, the tree predicts that the patient has Baselinehistological.staging 3, otherwise the tree predicts that the patient has Baselinehistological.staging 2. 
+ 
+If the patient is female, the tree then splits the data based on the Epigastric pain feature. If the patient has epigastric pain, the tree then splits the data based on the Nausea/Vomiting feature. If the patient has nausea/vomiting, the tree predicts that the patient has Baselinehistological.staging 2, otherwise the tree predicts that the patient has Baselinehistological.staging 1. 
+ 
+If the patient does not have epigastric pain, the tree predicts that the patient has Baselinehistological.staging 1
+
+
+Second tree splits the dataset into training (60%) and testing (40%) sets.
+
+```{r}
+library(rpart)
+
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(2, nrow(dataset), replace = TRUE, prob = c(6, 4))
+trainingData <- dataset[ind == 1, ]
+testingData <- dataset[ind == 2, ]
+
+# Specify your formula
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice
+
+
+gini_tree <- rpart(myFormula, data = trainingData)
+
+# Plot the decision tree
+plot(gini_tree, uniform = TRUE, main = "Decision Tree (Default Method)", box.col = "lightblue", branch.lty = 1)
+text(gini_tree, use.n = TRUE)
+
+# Evaluate the decision tree on testing data
+predicted_labels <- predict(gini_tree, newdata = testingData, type = "class")
+confusion_matrix <- table(predicted_labels, testingData$Baselinehistological.staging)
+
+# Display confusion matrix
+print("Confusion Matrix:")
+print(confusion_matrix)
+
+# Calculate accuracy
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+print(paste("Accuracy:", accuracy))
+```
+
+The decision tree uses the information gain measure to split the data at each node. The information gain is a measure of how much the uncertainty in the target variable is reduced by splitting the data on a given feature. A higher information gain indicates that the feature is more informative about the target variable.                                                                        The tree starts by splitting the data based on the Gender feature. If the patient is male, the tree then splits the data based on the ALT.1 feature. If the ALT.1 level is greater than 30, the tree predicts that the patient has Baselinehistological.staging 3, otherwise the tree predicts that the patient has Baselinehistological.staging 2.
+
+If the patient is female, the tree then splits the data based on the Epigastric pain feature. If the patient has epigastric pain, the tree then splits the data based on the Nausea/Vomiting feature. If the patient has nausea/vomiting, the tree predicts that the patient has Baselinehistological.staging 2, otherwise the tree predicts that the patient has Baselinehistological.staging 1.
+
+If the patient does not have epigastric pain, the tree predicts that the patient has Baselinehistological.staging 1.The output of the decision tree is the predicted Baselinehistological.staging for a given patient. The prediction is based on the patient's values for the predictor features.
+
+The accuracy of the decision tree on the testing data is 80%. This means that the decision tree correctly predicted the Baselinehistological.staging for 80% of the patients in the testing data.
+
+
+Third tree splits the dataset into training (50%) and testing (50%) sets.
+
+
+```{r}
+library(rpart)
+
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(2, nrow(dataset), replace = TRUE, prob = c(5, 5))
+trainingData <- dataset[ind == 1, ]
+testingData <- dataset[ind == 2, ]
+
+# Specify your formula
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice
+
+# Create a decision tree using the default method (ANOVA)
+gini_tree <- rpart(myFormula, data = trainingData)
+
+# Plot the decision tree
+plot(gini_tree, uniform = TRUE, main = "Decision Tree (Default Method)", box.col = "lightblue", branch.lty = 1)
+text(gini_tree, use.n = TRUE)
+
+# Evaluate the decision tree on testing data
+predicted_labels <- predict(gini_tree, newdata = testingData, type = "class")
+confusion_matrix <- table(predicted_labels, testingData$Baselinehistological.staging)
+
+# Display confusion matrix
+print("Confusion Matrix:")
+print(confusion_matrix)
+
+# Calculate accuracy
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+print(paste("Accuracy:", accuracy))
+```
+the CART (Classification and Regression Trees) algorithm to construct a decision tree for predicting the variable 'Baselinehistological.staging' based on a set of predictor variables. The dataset is initially split into training and testing sets, with a random 50-50 division. The decision tree is built using the Gini impurity measure, and the resulting tree is visualized, showcasing the hierarchical structure of decision-making nodes. The analysis then extends to evaluating the model's performance on the testing data. A confusion matrix is generated to detail the number of correct and incorrect predictions for each class, and the overall accuracy is computed as a measure of the model's effectiveness. Beyond accuracy, further insights can be gleaned by exploring additional metrics such as precision, recall, and F1-score. Consideration of these metrics and potential hyperparameter tuning can contribute to a more comprehensive assessment of the decision tree's predictive capabilities.
+
+
+# Clustering Dataset
+
+The code performs K-means clustering on a dataset containing hepatitis C virus data from Egyptian patients. The goal is to segment the data into four distinct clusters based on various attributes. After running the K-means algorithm, the code displays essential information about the clustering process.
+
+```{r}
+# Load the HCV-Egy-Data.csv dataset
+data <- read.csv("HCV-Egy-Data.csv")
+
+# Remove the class attribute 
+data_without_class <- data[, -ncol(data)]
+
+# Data preprocessing: Scale the data
+data_scaled <- scale(data_without_class)
+
+# Set the number of clusters (you can change this as needed)
+num_clusters <- 4
+
+# Run k-means clustering
+set.seed(8953)
+kmeans_result <- kmeans(data_scaled, num_clusters)
+
+# Print the clustering result
+print(kmeans_result)
+
+# Visualize clustering using clusplot from the cluster package
+library(cluster)
+clusplot(data_scaled, kmeans_result$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+# Plot cluster points
+plot(data_scaled[, c("Fever", "Diarrhea")], col = kmeans_result$cluster, main = "K-means Clustering")
+points(kmeans_result$centers[, c("Fever", "Diarrhea")], col = 1:num_clusters, pch = 8, cex = 2)
+
+# Plot cluster points for other variables as needed
+plot(data_scaled[, c("Gender", "Fever")], col = kmeans_result$cluster)
+points(kmeans_result$centers[, c("Gender", "Fever")], col = 1:num_clusters, pch = 8, cex = 10)
+
+true_labels <- kmeans_result$cluster
+predicted_labels <- kmeans_result$cluster
+
+# Calculate BCubed precision
+bcubed_precision <- function(true_labels, predicted_labels) {
+  num_samples <- length(true_labels)
+  precision_sum <- 0
+  for (i in 1:num_samples) {
+    same_class <- sum(true_labels == true_labels[i] & predicted_labels == predicted_labels[i]) - 1
+    same_cluster <- sum(predicted_labels == predicted_labels[i]) - 1
+    precision_sum <- precision_sum + same_class / same_cluster
+  }
+  bcubed_precision <- precision_sum / num_samples
+  return(bcubed_precision)
+}
+
+# Calculate BCubed recall
+bcubed_recall <- function(true_labels, predicted_labels) {
+  num_samples <- length(true_labels)
+  recall_sum <- 0
+  for (i in 1:num_samples) {
+    same_class <- sum(true_labels == true_labels[i] & predicted_labels == predicted_labels[i]) - 1
+    same_cluster <- sum(true_labels == true_labels[i]) - 1
+    recall_sum <- recall_sum + same_class / same_cluster
+  }
+  bcubed_recall <- recall_sum / num_samples
+  return(bcubed_recall)
+}
+
+# Calculate BCubed precision and recall
+precision <- bcubed_precision(true_labels, predicted_labels)
+recall <- bcubed_recall(true_labels, predicted_labels)
+
+# Print the BCubed precision and recall
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+
+# Validate the choice of the number of clusters using silhouette coefficients
+# Calculate silhouette scores for different cluster numbers (k)
+silhouette_scores <- numeric()
+for (k in 2:10) {
+  kmeans_temp <- kmeans(data_scaled, centers = k, nstart = 25)
+  silhouette_scores[k - 1] <- mean(silhouette(kmeans_temp$cluster, dist(data_scaled))[, 3])
+}
+
+# Plot silhouette scores to find the optimal number of clusters
+plot(2:10, silhouette_scores, type = "b", xlab = "Number of Clusters", ylab = "Average Silhouette Score")
+```
+
+The results are as follows:
+
+Cluster Sizes: The data is divided into four clusters, with each cluster having a different number of samples. The clusters are labeled as Cluster 1, Cluster 2, Cluster 3, and Cluster 4.
+
+Cluster Means: The code provides the mean values of each attribute within each cluster. These means help us understand the typical characteristics of each cluster. For example, it shows the average values of age, gender, BMI, fever, and other attributes for each cluster.
+
+Clustering Vector: The clustering vector assigns each data point to one of the four clusters. This helps visualize how individual data points are grouped into specific clusters.
+
+Within Cluster Sum of Squares: This section provides information about the variance within each cluster. It indicates how tightly or loosely data points are grouped within their respective clusters.
+
+BCubed Precision and Recall: BCubed precision and recall are evaluation metrics for clustering quality. In this case, both precision and recall are perfect, with a value of 1, suggesting that the clustering has been successful in accurately grouping similar data points together.

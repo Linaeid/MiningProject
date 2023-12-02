@@ -1,0 +1,3182 @@
+---
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+# Data Mining Project
+
+# 1. Problem
+
+The problem addressed in this dataset revolves around understanding and
+uncovering novel insights about the progression of Hepatitis C Virus
+(HCV) in Egyptian patients.
+
+What to Solve:
+
+-Classify Patients: Develop a classification model to categorize HCV
+patients based on various attributes and factors present in the dataset.
+This helps in understanding the diverse manifestations and progressions
+of the disease in different individuals.
+
+-Cluster Patients: Utilize clustering techniques to identify groups of
+patients with similar characteristics. This clustering can assist in the
+development of personalized treatment strategies, improving disease
+management and healthcare outcomes.
+
+-Extract Knowledge: Apply data mining techniques to extract hidden
+patterns, and valuable insights from the dataset. This knowledge
+discovery process aims to uncover information that may not be
+immediately apparent through conventional analysis.
+
+Why It Is Important:
+
+-Medical Understanding: Hepatitis C is a significant public health
+issue, and its understanding is crucial for effective management and
+treatment. By classifying patients, researchers and healthcare
+professionals can identify commonalities and differences in disease
+progression, leading to a deeper understanding of the virus's impact on
+individuals.
+
+-Advancements in Research: The project contributes to the broader field
+of medical research by using data mining techniques to uncover novel
+insights. This knowledge can inform future studies, guide research
+directions, and contribute to the development of more targeted and
+effective healthcare interventions.
+
+-Public Health Impact: Given the relatively high prevalence of HCV in
+Egypt, the outcomes of this project can have a direct impact on public
+health in the region. Improved understanding and personalized approaches
+to treatment can contribute to better management of the disease and
+potentially reduce its overall burden on the healthcare system.
+
+# 2.Data Mining Tasks:
+
+1.Classification Task:
+
+Class Attribute: Baseline Histological Staging
+
+This attribute represents the stage of baseline histological severity in
+HCV patients. It has four stages, indicating the severity of liver
+histopathology.
+
+Goals of Classification:
+
+Predictive Modeling: Develop a classification model to predict the
+baseline histological staging of HCV patients based on the given
+attributes (features) in the dataset.
+
+Patient Stratification: Classify patients into one of the four stages of
+baseline histological severity, providing insights into the progression
+of the disease in different individuals.
+
+Feature Importance: Identify the most significant features contributing
+to the classification of patients into different histological stages.
+
+2.Clustering Task:
+
+Goals of Clustering:
+
+Group Similar Patients: Apply clustering techniques to group patients
+with similar characteristics, identifying natural clusters within the
+dataset.
+
+Personalized Treatment Strategies: Uncover patient clusters that share
+common traits, helping in the development of personalized treatment
+strategies for specific patient groups.
+
+Discover Hidden Patterns: Extract hidden patterns in patient data that
+might not be immediately apparent, providing insights into the
+heterogeneity of HCV patients.
+
+Enhance Disease Understanding: Clustering can reveal subgroups with
+unique characteristics, contributing to a more nuanced understanding of
+HCV progression in Egyptian patients.
+
+# Goal of Collecting this Dataset
+
+The goal of collecting a Hepatitis C Virus (HCV) dataset To uncover
+novel knowledge and insights about HCV in Egyptian patients that may not
+be immediately apparent by understanding the progress of HCV in infected
+individuals. Data mining plays an essential role in the knowledge
+discovery process techniques which can be used to analyze how the
+disease evolves over time and what factors contribute to its
+progression.
+
+# 3.Data
+
+The dataset was sourced from the uci website in this URL :
+<http://archive.ics.uci.edu/dataset/503/hepatitis+c+virus+hcv+for+egyptian+patients>
+
+# General Information
+
+\- Number of Attributes: 28
+
+\- Number of Objects: 1385
+
+\- Type of Attributes: Numeric, Nominal,Ordinal
+
+-The goal of collecting a Hepatitis C Virus (HCV) dataset is to uncover
+novel knowledge and insights about HCV in Egyptian patients that may not
+be immediately apparent. This dataset serves a dual purpose: First, it
+allows us to classify patients into different categories based on
+various factors, providing a deeper understanding of the disease's
+progression and its impact on individuals. Second, through clustering
+techniques, we aim to identify distinct patient groups with similar
+characteristics, allowing for the development of personalized treatment
+strategies and better disease management. Data mining techniques play an
+essential role in the knowledge discovery process, helping us analyze
+the disease's evolution over time and determine the factors contributing
+to its progression and impact on different patient groups
+
+\- Features names:Age,Gender,BMI(Body Mass Index),Nausea/Vomting,
+Diarrhea, Fever, Headache,Fatigue & generalized bone ache, Jaundice,
+Epigastric pain, WBC(White blood cells),RBC(Red blood
+cells),HGB(Hemoglobin),Plat(Platelets), AST 1(aspartate transaminase
+ratio),ALT1(alanine transaminase ratio 1 week),ALT4(alanine transaminase
+ratio 4 weeks), ALT 12(alanine transaminase ratio 12 weeks), ALT
+24(alanine transaminase ratio 24 weeks), ALT 36(alanine transaminase
+ratio 36 weeks ),ALT 48(alanine transaminase ratio 48 weeks), ALT after
+24 w(after 24 warnings alanine transaminase ratio 24 weeks), RNA Base,
+RNA 4, RNA 12, RNA EOT(RNA end-of-treatment),RNA EF(RNA Elongation
+Factor), Baseline histological Grading, Baselinehistological staging.
+
+```{r}
+# Install and load necessary packages
+dataset <- read.csv('HCV-Egy-Data.csv')
+
+
+# Install and load necessary packages
+if(!require(Hmisc)){
+ install.packages("Hmisc")  # Install the Hmisc package        
+    }
+library("Hmisc")    # Load the Hmisc package
+```
+
+```{r}
+ describe(dataset)
+
+```
+
+# Data Structure
+
+the function str will help to understand the internal structure of the
+project Data name, variables and objects numbers, Dimension, Data Values
+(provided a preview of the first few data values for each variable)
+
+```{r}
+# Explore dataset structure
+str(dataset)
+
+```
+
+#Snapshot of Raw Dataset: Below is a snapshot of the raw dataset:
+
+```{r}
+
+head(dataset)
+```
+
+```{r}
+# Check for missing values
+sum(is.na(dataset))
+```
+
+No missing values in the data set
+
+# Summary statistics
+
+we choose three variables to show the Summary statistics for which (Age,
+Body mass index,RNA end-of-treatment )
+
+```{r}
+# Summary statistics for numerical variables
+summary(dataset[c("Age", "BMI", "RNA.EOT")])
+```
+
+These statistics shows that for 'Age' : -The minimum infected age is 32
+years. -The median age (50th percentile) is 46 years, meaning that 50%
+of the individuals are 46 years old or younger. -The mean age is
+approximately 46.32 years, providing the average age in the dataset.
+-The maximum age is 61 years, representing the oldest age in the dataset
+
+for 'BMI' : -The minimum BMI is 22.
+
+-The median BMI is 29, indicating that 50% of the individuals have a BMI
+of 29 or lower. -The mean BMI is approximately 28.61, providing the
+average BMI in the dataset.
+
+-The maximum BMI is 35, representing the highest BMI in the dataset
+
+for 'RNA' : -The minimum HCV RNA level at the end of treatment is 5.
+
+-The median HCV RNA level is 251,376, meaning that 50% of the
+individuals have an HCV RNA level of 251,376 or lower at the end of
+treatment. -The mean HCV RNA level is approximately 287,660, providing
+the average HCV RNA level at the end of treatment.
+
+-The maximum HCV RNA level at the end of treatment is 808,450,
+representing the highest value in the dataset.
+
+# Class Label
+
+The class label "Baselinehistological.staging" categorizes patients into
+four distinct stages, each representing a different level of the
+condition under study. These stages provide valuable insights into the
+distribution of patients across the disease's progression. The pie chart
+below illustrates the distribution of patients among these stages:
+
+```{r}
+
+if(!require(vcd)){
+ install.packages("vcd")  # Install the Hmisc package        
+    }
+if(!require(grid)){
+ install.packages("grid")  # Install the Hmisc package        
+    }
+
+
+```
+
+```{r}
+
+# Read the data from the CSV file
+data <-read.csv('HCV-Egy-Data.csv')
+
+
+# Create the contingency table
+contingency_table <- table(data$Baselinehistological.staging)
+
+# Calculate percentages
+percentages <- prop.table(contingency_table) * 100
+
+# Round percentages to 3 decimal places
+percentages <- round(percentages, 3)
+
+# Create labels for the pie chart
+labels <- paste0(names(contingency_table), '\n', percentages, '%')
+
+
+# Create the pie chart
+pie(contingency_table, labels = labels, main = "Patients based on the stage")
+
+# Load necessary libraries
+library(vcd)
+
+# Create a mosaic plot for 'Baselinehistological.staging' by 'Gender'
+mosaic(~ Baselinehistological.staging + Gender, data = dataset, main = "Mosaic Plot: Staging by Gender")
+
+
+
+```
+
+-   **Stage 1 (24.26%):** The lowest stage, comprising nearly a quarter
+    of the patient population, represents those individuals who are at
+    the early or milder phase of the disease. This stage may include
+    patients with minimal or mild pathological changes.
+
+-   **Stage 2 (23.971%):** The second stage, at just under 24%,
+    continues to indicate a substantial portion of the patient
+    population. Patients in this stage may exhibit a progression of the
+    condition compared to Stage 1, but it is still considered relatively
+    mild.
+
+-   **Stage 3 (25.623%):** Stage 3, representing over a quarter of the
+    patients, signifies a substantial portion of the population.
+    Patients in this stage may have a more advanced level of the
+    condition, possibly with moderate pathological changes, indicating a
+    significant disease burden.
+
+-   **Stage 4 (26.137%):** Finally, Stage 4, with slightly over a
+    quarter of the patients, indicates a significant proportion of
+    individuals at an advanced stage of the condition. Patients in this
+    stage may exhibit severe pathological changes, reflecting a higher
+    disease severity level.
+
+Furthermore;
+
+In the mosaic plot depicting the relationship between
+'Baselinehistological.staging' and 'Gender,' we observe a difference in
+the diagnosis patterns between men and women, particularly in stages 2
+and 3.
+
+In stage 3, it becomes evident that women were the most frequently
+diagnosed, while this stage had the lowest diagnosis rate among men.
+Stage 2 showed a similar trend, with women having the highest diagnosis
+rate, while men had the lowest. In contrast, stage 1 had nearly
+identical diagnosis rates for both genders, same was for stage 4.
+
+These findings highlight distinct gender-based disparities in the
+diagnosis of different stages. Women seem to be more frequently
+diagnosed in the later stages, whereas men exhibit different patterns,
+with a relatively higher prevalence in stage 1 and 4. The mosaic plot
+provides a clear visual representation of these discrepancies in
+diagnosis patterns between men and women across different disease
+stages.
+
+#plotting methods
+
+a-Histogram for 'Age'
+
+```{r}
+# Histogram for a numerical variable 'Age'
+hist(dataset$Age)
+
+
+
+```
+
+shows that a peak in HCV virus infections among individuals aged 32 to
+35, indicates that this specific age group is more susceptible to the
+virus.and comes after them who aged 53 to 55.
+
+b-Boxplot for 'Age' by 'Gender'
+
+```{r}
+boxplot(Age ~ Gender, data = dataset)
+```
+
+The box plot indicates that men are infected with the virus slightly
+more than women, with a difference of around 0.2% in the dataset. This
+translates to approximately 19 more infected individuals among men
+compared to women.
+
+```{r}
+if(!require(dplyr)){
+ install.packages("dplyr")  # Install the dplyr package        
+    }
+library("dplyr")    # Load the dplyr package
+```
+
+c-pie chart that shows patients who were suffering from Headache
+
+```{r}
+
+# Read the data from the CSV file
+data <-read.csv('HCV-Egy-Data.csv')
+
+
+# Create the contingency table
+contingency_table <- table(data$Headache)
+
+
+# Calculate percentages
+percentages <- prop.table(contingency_table) * 100
+
+# Round percentages to 3 decimal places
+percentages <- round(percentages, 3)
+
+# Create labels for the pie chart
+labels <- paste0(names(contingency_table), '\n', percentages, '%')
+
+# Create the pie chart
+pie(contingency_table, labels = labels, main = "Patients who suffer from Headache")
+
+```
+
+d-pie chart that shows patients who were suffering from Fever
+
+```{r}
+# Read the data from the CSV file
+data <-read.csv('HCV-Egy-Data.csv')
+
+# Create a table of the 'Fever' column
+tab <- table(data$Fever)
+
+# Calculate percentages
+percentages <- prop.table(tab) * 100
+
+# Round percentages to 3 decimal places
+percentages <- round(percentages, 3)
+
+# Create labels for the pie chart
+labels <- paste0(names(tab), '\n', percentages, '%')
+
+# Create the pie chart
+pie(tab, labels = labels, main = "Patients who suffer from Fever")
+```
+
+it's evident that 50% of individuals infected with HCV are experiencing
+headaches. Additionally, the data reveals that 51.5% of individuals
+infected by the virus are experiencing fever. This high percentage
+indicates that both fever and headache are common symptoms associated
+with HCV infection
+
+```{r}
+# Print the dimensions of the dataset
+dim(dataset)
+
+# Remove rows with missing values and print new dimensions
+dataset = na.omit(dataset)
+dim(dataset)
+```
+
+#Detecting outliers using boxplots
+
+Outliers in a database are data points that stand out from the rest and
+don't follow the usual pattern. They can cause problems in data analysis
+by making the results inaccurate or misleading. First, we identify all
+outliers for the numeric columns. Second, we deleted rows containing
+outliers. In our database we have 4 rows containing outliers.
+
+```{r}
+# Checking for outliers in various columns
+boxplot.stats(dataset$Age)$out
+boxplot.stats(dataset$BMI)$out
+boxplot.stats(dataset$WBC)$out
+boxplot.stats(dataset$RBC)$out
+boxplot.stats(dataset$HGB)$out
+boxplot.stats(dataset$Plat)$out
+boxplot.stats(dataset$AST.1)$out
+boxplot.stats(dataset$ALT.1)$out
+boxplot.stats(dataset$ALT4)$out
+boxplot.stats(dataset$ALT.12)$out
+boxplot.stats(dataset$ALT.24)$out
+boxplot.stats(dataset$ALT.36)$out
+boxplot.stats(dataset$ALT.48)$out
+boxplot.stats(dataset$ALT.after.24.w)$out
+boxplot.stats(dataset$RNA.Base)$out
+boxplot.stats(dataset$RNA.4)$out
+boxplot.stats(dataset$RNA.12)$out
+boxplot.stats(dataset$RNA.EOT)$out
+boxplot.stats(dataset$RNA.EF)$out
+boxplot.stats(dataset$Baseline.histological.Grading)$out
+
+
+```
+
+the information provided by these plots suggests that certain symptoms,
+age distributions, and disease staging may require careful scrutiny.
+High prevalence rates, differences between genders, or the presence of
+outliers can indicate data quality issues. Data preprocessing steps like
+handling missing values, addressing outliers, and ensuring data
+consistency may be necessary to enhance the reliability of the dataset
+for subsequent data mining tasks.
+
+# 4.Data Preprocessing:
+
+```{r}
+# Removing outliers
+# Remove outliers in the 'ALT.after.24.w' column
+outliers <- boxplot(dataset$ALT.after.24.w, plot = FALSE)$out
+dataset <- dataset[-which(dataset$ALT.after.24.w %in% outliers), ]
+boxplot.stats(dataset$ALT.after.24.w)$out
+
+# Remove outliers in the 'RNA.12' column
+outliers <- boxplot(dataset$RNA.12, plot = FALSE)$out
+dataset <- dataset[-which(dataset$RNA.12 %in% outliers), ]
+boxplot.stats(dataset$RNA.12)$out
+```
+
+# Normalization
+
+When normalizing our dataset using the z-score, it's important to note
+that this method does not inherently define a specific range for the
+transformed data. Instead, its purpose is to standardize the data by
+centering it around a mean of zero and scaling it to achieve a standard
+deviation of one. This standardization process facilitates comparisons
+between variables and aids in data analysis.
+
+```{r}
+
+# Define a Z-normalization function
+normalize <- function(x) {return ((x - mean(x)) / sd(x))}
+```
+
+```{r}
+# Apply normalization to selected columns
+dataset$BMI = normalize(dataset$BMI)
+dataset$WBC = normalize(dataset$WBC)
+dataset$RBC = normalize(dataset$RBC)
+dataset$HGB = normalize(dataset$HGB)
+dataset$Plat = normalize(dataset$Plat)
+dataset$AST.1 = normalize(dataset$AST.1)
+dataset$ALT.1 = normalize(dataset$ALT.1)
+dataset$ALT4 = normalize(dataset$ALT4)
+dataset$ALT.12 = normalize(dataset$ALT.12)
+dataset$ALT.24 = normalize(dataset$ALT.24)
+dataset$ALT.36 = normalize(dataset$ALT.36)
+dataset$ALT.48 = normalize(dataset$ALT.48)
+dataset$ALT.after.24.w= normalize(dataset$ALT.after.24.w)
+dataset$RNA.Base = normalize(dataset$RNA.Base)
+dataset$RNA.4 = normalize(dataset$RNA.4)
+dataset$RNA.12 = normalize(dataset$RNA.12)
+dataset$RNA.EOT = normalize(dataset$RNA.EOT)
+dataset$RNA.EF = normalize(dataset$RNA.EF)
+```
+
+Normalization is crucial when attributes have different ranges. By
+scaling them to a standard range, it prevents certain features from
+dominating others during model training, ensuring fair contributions
+from all features.
+
+# Encoding for binary coulmns
+
+Machine learning models typically require numerical input. Encoding
+binary columns converts categorical binary features into a format that
+models can interpret.
+
+```{r}
+dataset$Gender <- factor(dataset$Gender,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Fever <- factor(dataset$Fever,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Nausea.Vomting <- factor(dataset$Nausea.Vomting,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Headache <- factor(dataset$Headache,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Diarrhea <- factor(dataset$Diarrhea,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Fatigue...generalized.bone.ache <- factor(dataset$Fatigue...generalized.bone.ache,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Jaundice <- factor(dataset$Jaundice,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Epigastric.pain <- factor(dataset$Epigastric.pain,levels = c("1", "2"), labels = c("1", "2"))
+dataset$Baseline.histological.Grading <- factor(dataset$Baseline.histological.Grading,levels = c("3", "4","5" ,"6" ,"7" ,"8" ,"9" ,"10" , "11" , "12" , "13","14" ,"15" ,"16"), labels = c("3", "4","5" ,"6" ,"7" ,"8" ,"9" ,"10" , "11" , "12" , "13","14" ,"15" ,"16"))
+dataset$Baselinehistological.staging <- factor(dataset$Baselinehistological.staging,levels = c("1", "2","3" ,"4" ), labels = c("1", "2","3" ,"4" ))
+```
+
+Machine learning algorithms often expect numerical input, and encoding
+binary columns is a standard preprocessing step to ensure compatibility.
+
+# Discretization
+
+We used discretization in our dataset by dividing the continuous age
+values into six equal-width interval categories ([32,37], [37,42],
+[42,47], [47,52],[52,57) and [57,62), we were able to transform the
+continuous age values into discrete intervals. The age data will be
+easier to understand and utilize for classification and other analytical
+methods in our model.
+
+```{r}
+# Discretize the 'Age' column into intervals
+dataset$Age = cut(dataset$Age, breaks = seq(32, 62, by = 5), right = FALSE)
+```
+
+```{r}
+print(dataset)
+
+```
+
+Discretization can simplify complex relationships in data, and in this
+case, it transforms age into a categorical variable, making it easier to
+interpret in the context of the classification task.
+
+```{r}
+if(!require(caret)){
+install.packages("caret")  # Install the caret package
+    }
+
+library(caret)    # Load the caret package
+```
+
+# Calculate the correlation between 'Baselinehistological.staging' and other columns
+
+```{r}
+datacor <- read.csv('HCV-Egy-Data.csv')
+
+cor(datacor$Baselinehistological.staging, datacor$Gender)
+cor(datacor$Baselinehistological.staging, datacor$BMI)
+cor(datacor$Baselinehistological.staging, datacor$Diarrhea)
+cor(datacor$Baselinehistological.staging, datacor$Fever)
+cor(datacor$Baselinehistological.staging, datacor$Headache)
+cor(datacor$Baselinehistological.staging, datacor$Jaundice)
+cor(datacor$Baselinehistological.staging, datacor$Epigastric.pain)
+cor(datacor$Baselinehistological.staging, datacor$WBC)
+cor(datacor$Baselinehistological.staging, datacor$RBC)
+cor(datacor$Baselinehistological.staging, datacor$HGB)
+cor(datacor$Baselinehistological.staging, datacor$Plat)
+cor(datacor$Baselinehistological.staging, datacor$AST.1)
+cor(datacor$Baselinehistological.staging, datacor$ALT4)
+cor(datacor$Baselinehistological.staging, datacor$ALT.12)
+cor(datacor$Baselinehistological.staging, datacor$ALT.24)
+cor(datacor$Baselinehistological.staging, datacor$ALT.36)
+cor(datacor$Baselinehistological.staging, datacor$ALT.48)
+cor(datacor$Baselinehistological.staging, datacor$ALT.after.24.w)
+cor(datacor$Baselinehistological.staging, datacor$RNA.Base)
+cor(datacor$Baselinehistological.staging, datacor$RNA.4)
+cor(datacor$Baselinehistological.staging, datacor$RNA.12)
+cor(datacor$Baselinehistological.staging, datacor$RNA.EOT)
+cor(datacor$Baselinehistological.staging, datacor$RNA.EF)
+cor(datacor$Baselinehistological.staging, datacor$Baseline.histological.Grading)
+
+```
+
+Based on the results of our calculations using the correlation
+coefficient, we have determined that there are no highly correlated
+columns in our dataset. Therefore, there is no need to remove any
+features.
+
+# Recursive Feature elimination
+
+Recursive Feature elimination(RFE) is a method to choose a subset of
+features. It starts with all the features and removes feature with
+lowest score at each iteration. It trains with smaller and smaller
+subset of features and find the best set of features.
+
+Chi-square tests were performed for each attribute against the target
+variable (Baselinehistological.staging). The top 5 features with the
+lowest p-values were selected.
+
+```{r}
+# Create an empty data frame to store attribute names and their p-values
+results <- data.frame(Attribute = character(0), p_value = numeric(0))
+
+# Get the column names of the dataset
+column_names <- colnames(dataset)
+
+# Perform chi-square test for each attribute
+for (attribute in column_names) {
+  if (attribute != "Baselinehistological.staging") {
+    # Create a contingency table
+    contingency_table <- table(dataset[[attribute]], dataset$Baselinehistological.staging)
+    
+    # Perform chi-square test
+    result <- chisq.test(contingency_table)
+    
+
+    
+    # Print the attribute name and the result
+    cat("Attribute:", attribute, "\n")
+    print(result)
+    cat("\n")
+  
+
+    # Store the attribute name and its p-value
+    results <- rbind(results, data.frame(Attribute = attribute, p_value = result$p.value))
+  }
+}
+
+# Sort the results in ascending order of p-values
+sorted_results <- results[order(results$p_value), ]
+
+# Select the lowest 5 features
+lowest_5_features <- head(sorted_results, 5)
+
+# Display the lowest 5 features
+print(lowest_5_features)
+
+```
+
+```{r}
+# Load the ggplot2 library
+
+library(ggplot2)
+
+# Create the bar plot
+ggplot(data = lowest_5_features, aes(x = Attribute, y = p_value)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  labs(
+       x = "Attribute",
+       y = "P-value") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = scales::scientific_format())  # Optional: Use scientific notation for y-axis labels
+
+# Save the plot to a file (e.g., a PNG image)
+ggsave("pvalue_bar_plot.png", plot = last_plot(), width = 10, height = 6)
+```
+
+## Feature Selection Insight: Prioritizing Relevant Attributes Based on P-Values
+
+This bar plot visually depicts the statistical significance of five
+attributes in relation to the "Baselinehistological.staging" variable.
+These attributes have been identified due to their relatively low
+p-values, suggesting a potential association with
+"Baselinehistological.staging."
+
+In feature selection, we typically aim to choose features that are most
+informative or relevant to the outcome variable. Therefore, we focus on
+features with the lowest p-values or, equivalently, the highest
+statistical significance.
+
+Low p-value : A low p-value indicates strong evidence against the null
+hypothesis, suggesting that the variable is associated with the outcome.
+In the context of feature selection, lower p-values are often preferred.
+
+Firstly, "Gender" shows a p-value of 0.0832, indicating moderate
+statistical significance, hinting at a possible link between gender and
+baseline histological staging. "Epigastric Pain" follows with a p-value
+of 0.0876, suggesting that it may be associated with the staging.
+"Nausea/Vomiting" exhibits a p-value of 0.1622, indicating a moderate
+level of significance, hinting at a potential connection. "Jaundice" has
+a p-value of 0.2990, implying that it might be linked to the staging,
+albeit with less statistical significance. Lastly, "ALT.1" shows a
+p-value of 0.3166, suggesting that ALT.1 levels may have some connection
+with the baseline histological staging.
+
+#Snapshot of Preprocessed Dataset:
+
+Below is a snapshot of the preprocessed dataset after applying the
+described preprocessing steps:
+
+```{r}
+print(head(dataset))
+
+```
+
+The preprocessing steps were chosen to enhance the quality of the
+dataset and prepare it for classification tasks. Normalization ensures
+that all features contribute equally, encoding binary columns enables
+proper representation, discretization simplifies age analysis, and RFE
+helps identify significant features. These steps collectively contribute
+to a more robust and suitable dataset for subsequent modeling and
+analysis.
+
+# 5.Data Mining Task
+
+1.  Classification Technique:
+
+-CART (Classification and Regression Trees) Algorithm:
+
+Reason for Selection: CART is a decision tree algorithm that is
+well-suited for classification tasks. It provides interpretable rules
+and is effective for both categorical and numerical data.
+
+R Packages: rpart: Used for implementing the CART algorithm.
+
+Implementation: rpart package's rpart function is used to build the
+decision tree. Model evaluation is done using a confusion matrix and
+various performance metrics.
+
+-ID3 (Iterative Dichotomiser 3) Algorithm:
+
+Reason for Selection: ID3 is a classic decision tree algorithm known for
+its use of information gain for node splitting.
+
+R Packages: rpart
+
+Implementation: rpart package's rpart function with the "information"
+split method is used to build the decision tree. Model evaluation is
+done similarly to the CART algorithm.
+
+-C5.0 Algorithm:
+
+Reason for Selection: C5.0 is another decision tree algorithm known for
+its efficiency and accuracy. It handles both categorical and numerical
+data, making it suitable for a diverse dataset.
+
+R Packages: C50: Used for implementing the C5.0 decision tree algorithm.
+
+Implementation: C50 package's C5.0 function is used to build the
+decision tree. Model evaluation involves a confusion matrix and various
+performance metrics.
+
+2.  Clustering Technique:
+
+3.  K-means Clustering:
+
+Algorithm Used: K-means clustering Reason for Selection: K-means is a
+widely used clustering algorithm that partitions data into distinct
+groups based on similarities. It is effective when the number of
+clusters is known or can be estimated, providing cluster centers and
+assignments for each data point. R Packages: Base R (for kmeans) and
+cluster (for clusplot). Implementation: Utilized the kmeans function in
+base R for K-means clustering. The results, including cluster sizes,
+means, and the clustering vector, were presented. Evaluation metrics
+such as BCubed precision and recall were calculated. Visualized
+clustering using the clusplot function from the cluster package. 2.
+Hierarchical Clustering:
+
+Algorithm Used: Hierarchical clustering Reason for Selection:
+Hierarchical clustering creates a tree-like structure of clusters,
+providing insights into relationships at different levels of
+granularity. It is suitable for exploring hierarchical structures within
+the data. R Packages: Base R (for hclust) and cluster (for clusplot).
+Implementation: Employed the hclust function in base R for hierarchical
+clustering. The results were visualized using the clusplot function from
+the cluster package, offering a different perspective on the data's
+hierarchical organization. Evaluation Metrics (Applicable to Both):
+
+BCubed Precision: Measures precision of clustering results. A higher
+value indicates better precision. BCubed Recall: Measures recall of
+clustering results. A higher value indicates better recall. Average
+Silhouette Width: Indicates the cohesion and separation of clusters. A
+higher value suggests well-defined clusters. Total Within-Cluster Sum of
+Squares: Reflects the compactness of clusters. A lower value indicates
+tighter and more compact clusters.
+
+# 6.Evaluation and comparion
+
+# Classification
+
+```{r}
+
+# Load necessary libraries
+if(!require(party)){
+ install.packages("party")  # Install the Hmisc package        
+    }
+library(party)
+
+if(!require(rpart)){
+ install.packages("rpart") 
+install.packages('rpart.plot')# Install the Hmisc package        
+}
+
+library(party)
+library('rpart.plot')
+
+```
+
+```{r}
+# Assuming 'originalDataset' is your original dataset
+selectedFeatures <- c("Gender", "Epigastric.pain", "Nausea.Vomting", "Jaundice", "ALT.1")
+
+# Check the class of the dataset
+class(dataset)
+
+# Check column names
+colnames(dataset)
+
+# Create a new dataset with selected features and the class label
+selectedDataset <- dataset[, c(selectedFeatures, "Baselinehistological.staging"), drop = FALSE]
+
+# Print the structure of the selected dataset
+str(selectedDataset)
+
+```
+
+## Feature Selection and Dataset Creation
+
+In our analysis, we sought to identify and prioritize features that
+exhibit potential associations with the "Baselinehistological.staging"
+variable. The feature selection process involved evaluating the
+statistical significance of various attributes, with a focus on
+achieving a comprehensive understanding of their potential impact on the
+baseline histological staging.
+
+Dataset Creation: To further explore and analyze the identified features
+in relation to baseline histological staging, a new dataset, named
+'selectedDataset,' was constructed. This dataset exclusively includes
+the selected features---Gender, Epigastric Pain, Nausea/Vomiting,
+Jaundice, and ALT.1---alongside the target variable
+"Baselinehistological.staging."
+
+Dataset Structure: The structure of 'selectedDataset' is designed to
+facilitate a focused analysis on the chosen features. It is a data frame
+that retains the original dataset structure, ensuring clarity and ease
+of interpretation. By isolating these features alongside the class
+label, we aim to gain deeper insights into their potential contributions
+to the variability observed in baseline histological staging.
+
+The 'selectedDataset' provides a streamlined and targeted subset of our
+original dataset, enhancing the efficiency of subsequent analyzes and
+promoting a more in-depth understanding of the influencing factors
+baseline histological staging.
+
+# tree using the CART (Classification and Regression Trees) algorithm
+
+## First tree splits the dataset into training (70%) and testing (30%) sets.
+
+```{r 1 ,cache = TRUE}
+
+selectedDataset$Baselinehistological.staging <- factor(selectedDataset$Baselinehistological.staging)
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(1:nrow(selectedDataset), size = 0.7 * nrow(selectedDataset), replace = FALSE)
+
+# Create training and testing sets
+trainingData <- selectedDataset[ind, ]
+testingData <- selectedDataset[-ind, ]
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+
+```
+
+In this code, I convert the class label to a factor, set a random seed
+for reproducibility, and create training and testing sets using a 70-30
+split based on the selected features for a classification model.
+
+```{r 2 ,cache = TRUE}
+
+# Using CART with rpart
+selectedDataset.cart <- rpart(myFormula, data = trainingData, method = "class", parms = list(split = "gini"))
+# Plot the decision tree
+library(rpart.plot)
+rpart.plot(selectedDataset.cart)
+```
+
+This code fits a classification tree using CART with the "gini" index
+for splitting and visualizes the decision tree using the rpart.plot
+library.
+
+The decision tree suggests that the presence of nausea or vomiting is
+the most important factor for predicting the disease stage. Patients
+with nausea or vomiting are more likely to have Stage I disease,
+regardless of the other predictor variables.
+
+If the patient does not have nausea or vomiting, then the presence of
+jaundice is the next most important factor for predicting the disease
+stage. Patients with jaundice are more likely to have Stage II disease,
+regardless of the other predictor variables.
+
+If the patient does not have nausea or vomiting or jaundice, then the
+value of ALT.1 is considered. Patients with ALT.1 less than or equal to
+40 are more likely to have Stage I disease, while patients with ALT.1
+greater than 40 are more likely to have Stage II disease.
+
+Finally, if the patient does not have nausea or vomiting, jaundice, or
+an ALT.1 value less than or equal to 40, then the presence of epigastric
+pain is considered. Patients with epigastric pain are more likely to
+have Stage I disease, while patients without epigastric pain are more
+likely to have Stage II disease.
+
+```{r 3 ,cache = TRUE}
+#the result
+testPredc <- predict(selectedDataset.cart, newdata = testingData, type = "class")
+resultc <- table(testPredc, testingData$Baselinehistological.staging)
+```
+
+This code generates predictions using the CART model on the testing data
+and creates a confusion matrix for evaluation.
+
+```{r 4 ,cache = TRUE}
+#Evaluate the model:
+co_resultc <- confusionMatrix(resultc)
+print(co_resultc)
+sensitivity(as.table(co_resultc))
+specificity(as.table(co_resultc))
+precision(as.table(co_resultc))
+accc <- co_resultc$overall["Accuracy"]
+accc
+
+
+```
+
+The classification model has been evaluated using a confusion matrix and
+various performance metrics. The confusion matrix provides a detailed
+breakdown of predicted and actual class memberships, allowing us to
+assess the model's strengths and weaknesses.
+
+The provided statistics by class include sensitivity, specificity,
+positive predictive value, negative predictive value, prevalence,
+detection rate, detection prevalence, and balanced accuracy for each
+class in a multi-class classification model.
+
+To address the issue of NA values, manual calculations can be performed,
+taking the average across all classes. the below code are the manual
+calculations for some key metrics:
+
+```{r 5 ,cache = TRUE}
+# Sensitivity
+sensitivity_values <- c(0.3370, 0.06122, 0.0000, 0.7048)
+average_sensitivity <- mean(sensitivity_values)
+
+# Specificity
+specificity_values <- c(0.7492, 0.92744, 1.0000, 0.3548)
+average_specificity <- mean(specificity_values)
+
+# Precision
+precision_values <- c(0.2768, 0.20690, NaN, 0.2701)
+average_precision <- mean(precision_values, na.rm = TRUE)
+
+
+# Display the results
+cat("Average Sensitivity:", average_sensitivity, "\n")
+cat("Average Specificity:", average_specificity, "\n")
+cat("Average Precision:", average_precision, "\n")
+accc <- co_resultc$overallaccc <- co_resultc$overall["Accuracy"]
+cat("Accuracy:", accc, "\n")
+
+
+
+
+```
+
+The manually calculated averages provide a way to handle the NA values
+and offer insights into the overall performance of the model across all
+classes. It's important to consider these averages for a comprehensive
+evaluation of the model's effectiveness.
+
+### Model Performance Summary:
+
+-   Average Sensitivity (Recall): 27.6%
+
+Moderate ability to capture true positive instances.
+
+-   Average Specificity: 75.8%
+
+Proficient in correctly excluding instances not belonging to the
+predicted class.
+
+-   Average Precision: 25.1%
+
+Challenges in making highly accurate positive predictions, potentially
+affected by false positives.
+
+-   Accuracy: 26.7%
+
+General measure of correct predictions, influenced by potential class
+imbalances.
+
+**Overall Assessment:**
+
+Mixed performance with strengths in sensitivity and specificity but
+lower precision. Potential challenges may warrant further investigation,
+model refinement, or feature engineering. Continuous monitoring and
+adjustments are essential for improvement.
+
+**the Accuracy of data split(70%,30%) using CART algorithm equal
+26.7%.**
+
+## second tree splits the dataset into training (60%) and testing (40%) sets.
+
+```{r 6 ,cache = TRUE}
+
+selectedDataset$Baselinehistological.staging <- factor(selectedDataset$Baselinehistological.staging)
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(1:nrow(selectedDataset), size = 0.6 * nrow(selectedDataset), replace = FALSE)
+
+# Create training and testing sets
+trainingData <- selectedDataset[ind, ]
+testingData <- selectedDataset[-ind, ]
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+
+```
+
+In this code, I convert the class label to a factor, set a random seed
+for reproducibility, and create training and testing sets using a 60-40
+split based on the selected features for a classification model.
+
+```{r 7 ,cache = TRUE}
+
+# Using CART with rpart
+selectedDataset.cart <- rpart(myFormula, data = trainingData, method = "class", parms = list(split = "gini"))
+# Plot the decision tree
+library(rpart.plot)
+rpart.plot(selectedDataset.cart)
+```
+
+This code fits a classification tree using CART with the "gini" index
+for splitting and visualizes the decision tree using the rpart.plot
+library.
+
+In the decision tree, ALT.1 is used to make two major decisions:
+
+Initial split: The decision tree first splits the data based on whether
+the patient's ALT.1 is less than -0.29. This is because ALT.1 is a
+relatively easy and inexpensive test to perform, and a high proportion
+of patients with Stage I disease will have an ALT.1 level less than or
+equal to -0.29.
+
+Subsequent splits: If the patient's ALT.1 is not less than or equal to
+-0.29, the decision tree uses ALT.1 to make further decisions about the
+patient's disease stage. For example, if the patient's ALT.1 is greater
+than -0.29, the decision tree uses ALT.4, the ALT level at four weeks,
+to make a final decision about the patient's disease stage. Overall,
+ALT.1 is an important predictor variable for predicting the disease
+stage because it is a relatively easy and inexpensive test to perform,
+and it is sensitive to liver damage. However, it is important to note
+that ALT.1 is not the sole predictor variable, and other factors such as
+nausea, vomiting, jaundice, ALT4, RNA.Base, and epigastric pain also
+play a role in the decision-making process.
+
+```{r 8 ,cache = TRUE}
+#the result
+testPredc <- predict(selectedDataset.cart, newdata = testingData, type = "class")
+resultc <- table(testPredc, testingData$Baselinehistological.staging)
+```
+
+This code generates predictions using the CART model on the testing data
+and creates a confusion matrix for evaluation.
+
+```{r 9 ,cache = TRUE}
+#Evaluate the model:
+co_resultc <- confusionMatrix(resultc)
+print(co_resultc)
+sensitivity(as.table(co_resultc))
+specificity(as.table(co_resultc))
+precision(as.table(co_resultc))
+accc <- co_resultc$overall["Accuracy"]
+accc
+
+```
+
+The classification model has been evaluated using a confusion matrix and
+various performance metrics. The confusion matrix provides a detailed
+breakdown of predicted and actual class memberships, allowing us to
+assess the model's strengths and weaknesses.
+
+The provided statistics by class include sensitivity, specificity,
+positive predictive value, negative predictive value, prevalence,
+detection rate, detection prevalence, and balanced accuracy for each
+class in a multi-class classification model.
+
+To address the issue of NA values, manual calculations can be performed,
+taking the average across all classes. the below code are the manual
+calculations for some key metrics:
+
+```{r 10 ,cache = TRUE}
+# Sensitivity, Specificity, Precision, and Accuracy values for each class
+sensitivity_values <- c(0.41860, 0.0000, 0.0000, 0.5857)
+specificity_values <- c(0.57783, 1.0000, 1.0000, 0.4237)
+precision_values <- c(0.23176, NaN, NaN, 0.2562)
+
+# Calculate averages
+average_sensitivity <- mean(sensitivity_values)
+average_specificity <- mean(specificity_values)
+average_precision <- mean(precision_values, na.rm = TRUE)
+
+# Display the results
+cat("Average Sensitivity:", average_sensitivity, "\n")
+cat("Average Specificity:", average_specificity, "\n")
+cat("Average Precision:", average_precision, "\n")
+accc <- co_resultc$overallaccc <- co_resultc$overall["Accuracy"]
+cat("Accuracy:", accc, "\n")
+
+
+
+
+```
+
+The manually calculated averages provide a way to handle the NA values
+and offer insights into the overall performance of the model across all
+classes. It's important to consider these averages for a comprehensive
+evaluation of the model's effectiveness.
+
+### Model Performance Summary:
+
+-   Average Sensitivity: 25.1%
+
+-   Average Specificity: 75.03%
+
+-   Average Precision: 24.39%
+
+-   Accuracy: 24.59%
+
+**Observations:**
+
+1.  The model demonstrates varied performance across different classes.
+2.  Notable challenges in sensitivity for Class 2,3 and precision for
+    Class 2,3.
+3.  Overall model accuracy is influenced by potential class imbalances.
+
+**the Accuracy of data split(60%,40%) using CART algorithm equal
+24.59%.**
+
+## third tree splits the dataset into training (50%) and testing (50%) sets.
+
+```{r 12 ,cache = TRUE}
+
+selectedDataset$Baselinehistological.staging <- factor(selectedDataset$Baselinehistological.staging)
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(1:nrow(selectedDataset), size = 0.5 * nrow(selectedDataset), replace = FALSE)
+
+# Create training and testing sets
+trainingData <- selectedDataset[ind, ]
+testingData <- selectedDataset[-ind, ]
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+
+```
+
+In this code, I convert the class label to a factor, set a random seed
+for reproducibility, and create training and testing sets using a 50-50
+split based on the selected features for a classification model.
+
+```{r 22 ,cache = TRUE}
+
+# Using CART with rpart
+selectedDataset.cart <- rpart(myFormula, data = trainingData, method = "class", parms = list(split = "gini"))
+# Plot the decision tree
+library(rpart.plot)
+rpart.plot(selectedDataset.cart)
+```
+
+This code fits a classification tree using CART with the "gini" index
+for splitting and visualizes the decision tree using the rpart.plot
+library.
+
+In the decision tree, ALT.1 is used to make two major decisions:
+
+Initial split: The decision tree first splits the data based on whether
+the patient's ALT.1 is less than 0.14. This is because ALT.1 is a
+relatively easy and inexpensive test to perform, and a high proportion
+of patients with Stage I disease will have an ALT.1 level less than
+0.14.
+
+Subsequent splits: If the patient's ALT.1 is not less than 0.14, the
+decision tree uses ALT.1 to make further decisions about the patient's
+disease stage. For example, if the patient's ALT.1 is greater than 0.79
+so patient's disease stage III , else The patient's disease stage IIII.
+
+Overall, ALT.1 is an important predictor variable for predicting the
+disease stage because it is a relatively easy and inexpensive test to
+perform, and it is sensitive to liver damage. However, it is important
+to note that ALT.1 is not the sole predictor variable, and other factors
+such as nausea, vomiting, jaundice, ALT4, RNA.Base, and epigastric pain
+also play a role in the decision-making process.
+
+```{r 32 ,cache = TRUE}
+#the result
+testPredc <- predict(selectedDataset.cart, newdata = testingData, type = "class")
+resultc <- table(testPredc, testingData$Baselinehistological.staging)
+```
+
+This code generates predictions using the CART model on the testing data
+and creates a confusion matrix for evaluation.
+
+```{r 92 ,cache = TRUE}
+#Evaluate the model:
+co_resultc <- confusionMatrix(resultc)
+print(co_resultc)
+sensitivity(as.table(co_resultc))
+specificity(as.table(co_resultc))
+precision(as.table(co_resultc))
+accc <- co_resultc$overall["Accuracy"]
+accc
+
+```
+
+The classification model has been evaluated using a confusion matrix and
+various performance metrics. The confusion matrix provides a detailed
+breakdown of predicted and actual class memberships, allowing us to
+assess the model's strengths and weaknesses.
+
+The provided statistics by class include sensitivity, specificity,
+positive predictive value, negative predictive value, prevalence,
+detection rate, detection prevalence, and balanced accuracy for each
+class in a multi-class classification model.
+
+To address the issue of NA values, manual calculations can be performed,
+taking the average across all classes. the below code are the manual
+calculations for some key metrics:
+
+```{r 42 ,cache = TRUE}
+# Sensitivity, Specificity, Precision, and Accuracy values for each class
+sensitivity_values <- c(0.5706  , 0.0000   , 0.1809     , 0.23429)
+specificity_values <- c(0.4451   , 1.0000   , 0.8131  , 0.73643)
+precision_values <- c(0.2409        , NaN         , 0.2656     , 0.23164)
+
+
+# Calculate averages
+average_sensitivity <- mean(sensitivity_values)
+average_specificity <- mean(specificity_values)
+average_precision <- mean(precision_values, na.rm = TRUE)
+
+
+# Display the results
+cat("Average Sensitivity:", average_sensitivity, "\n")
+cat("Average Specificity:", average_specificity, "\n")
+cat("Average Precision:", average_precision, "\n")
+accc <- co_resultc$overallaccc <- co_resultc$overall["Accuracy"]
+cat("Accuracy:", accc, "\n")
+
+
+
+
+```
+
+The manually calculated averages provide a way to handle the NA values
+and offer insights into the overall performance of the model across all
+classes. It's important to consider these averages for a comprehensive
+evaluation of the model's effectiveness.
+
+### Model Performance Summary:
+
+-   Average Sensitivity: 24.64%
+
+-   Average Specificity: 74.86%
+
+-   Average Precision: 24.6%
+
+-   Accuracy: 24.3%
+
+**Observations:**
+
+1.  The model demonstrates varied sensitivity across different classes.
+2.  Challenges in Positive Predictive Value for Class 2.
+3.  Overall model accuracy affected by class imbalances.
+
+**the Accuracy of data split(50%,50%) using CART algorithm equal
+24.3%.**
+
+### Comparison of the three different splitting of CART algorithm
+
+```{r}
+library(knitr)
+
+# Sample data
+Table <- data.frame(
+  Algorithm = c("70 %t raining set 30% testing set:", "60 %t raining set 40% testing set:", "50 %t raining set 50% testing set:"),
+  Accuracy = c("26.7%", "24.59%", "24.3%"),
+  Precision = c("25.1%", "24.39%", "24.6%"),
+  Sensitivity = c("27.6%", "25.1%", "24.64%"),
+  Specificity = c("75.8%", "75.03%", "74.86%")
+)
+
+# Display the table using kable
+kable(Table, format = "markdown", align = "c")
+```
+
+Based on these comparison, the 70% training - 30% testing split
+generally demonstrates slightly better performance in terms of accuracy,
+precision, sensitivity, and specificity. However, the differences are
+relatively small, and the choice of the best split depends on other
+considerations such as the available data and the specific goals of the
+model.
+
+# decision tree using the ID3 algorithm uning Ingormation gain
+
+## First tree splits the dataset into training (70%) and testing (30%) sets.
+
+```{r 52,cache = TRUE}
+
+selectedDataset$Baselinehistological.staging <- factor(selectedDataset$Baselinehistological.staging)
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(1:nrow(selectedDataset), size = 0.7 * nrow(selectedDataset), replace = FALSE)
+
+# Create training and testing sets
+trainingData <- selectedDataset[ind, ]
+testingData <- selectedDataset[-ind, ]
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+```
+
+```{r 62,cache = TRUE}
+# Load the necessary libraries
+library(party)
+library(rpart)
+library(rpart.plot)
+
+# tree 1 for information gain
+# Using ID3 with rpart
+dataset.id3 <- rpart(myFormula, data = trainingData, method = "class", parms = list(split = "information"))
+printcp(dataset.id3)  # Display cp table for pruning
+
+```
+
+The code builds a decision tree using the ID3 algorithm with the rpart
+package, specifically considering information gain for splitting nodes.
+The printcp function is then used to display the complexity parameter
+(cp) table, providing insights into potential pruning decisions for the
+tree. This step helps in identifying an optimal level of complexity for
+the decision tree.
+
+**Analysis of the Output:**
+
+-   The classification tree was constructed using the specified formula
+    and training data.
+
+-   Variables used in tree construction are ALT.1, Jaundice, and
+    Nausea.Vomting.
+
+-   Root node error is calculated as 711/966, resulting in 73.60% error.
+    The complexity parameter (CP) table provides information on relative
+    error and xerror (cross-validation error) for different levels of
+    complexity.
+
+-   The tree is pruned based on the CP values, aiming to find an optimal
+    balance between complexity and accuracy.
+
+-   Notable CP values are considered for potential pruning, such as
+    0.033755 and 0.011721.
+
+-   The xerror decreases with increasing complexity, indicating
+    potential improvement with deeper trees.
+
+```{r 72,cache = TRUE}
+# Save the plot to a variable
+my_plot <- rpart.plot(dataset.id3, box.palette = "RdBu", branch.lty = 1, shadow.col = "gray", nn = TRUE, type = 2)
+# Plot the decision tree
+print(my_plot)
+
+```
+
+Rule 1: If the patient's ALT.1 level is greater than or equal to -0.32,
+the decision tree predicts Stage 4 disease.
+
+This rule applies regardless of the patient's gender, epigastric pain,
+nausea or vomiting, jaundice, ALT4, RNA.Base, or ALT.12 levels. The
+decision tree has learned that patients with ALT.1 levels greater than
+or equal to -0.32 are more likely to have Stage I disease, even if they
+exhibit other symptoms or have abnormal test results.
+
+Rule 2: If the patient's ALT.1 level is less than -0.32 and they have
+jaundice, the decision tree predicts Stage 1 disease.
+
+This rule applies if the patient doesn't fall under Rule 1 and has
+jaundice. The presence of jaundice, along with a low ALT.1 level, is a
+strong indicator of Stage 2 disease.
+
+Rule 3: If the patient's ALT.1 level is less than -0.32 and they don't
+have jaundice, the decision tree proceeds to further splits based on
+other predictor variables as shown in the tree.
+
+This rule applies if the patient doesn't fall under Rule 1 or Rule 2.
+The decision tree then considers a combination of factors, including
+nausea.vomiting, ALTT.1 , to make a more refined prediction about the
+disease stage.
+
+```{r 82,cache = TRUE}
+# Make predictions on the test set
+testPred <- predict(dataset.id3, newdata = testingData, type = "class")
+result <- table(testPred, testingData$Baselinehistological.staging)
+```
+
+Predictions are made on the test set using the ID3-based decision tree,
+and the results are tabulated for evaluation.
+
+```{r 92,cache = TRUE}
+# Evaluate the model:
+library(e1071)
+library(caret)
+
+co_result <- confusionMatrix(result)
+print(co_result)
+
+# Display sensitivity, specificity, precision, and accuracy
+sensitivity(as.table(co_result))
+specificity(as.table(co_result))
+precision(as.table(co_result))
+acc <- co_result$overall["Accuracy"]
+print(paste("Accuracy:", acc))
+
+```
+
+The decision tree uses the information gain measure to split the data at
+each node. The information gain is a measure of how much the uncertainty
+in the target variable is reduced by splitting the data on a given
+feature.
+
+This tree is a classification tree that is used to predict the
+Baselinehistological.staging of a The classification model has been
+evaluated using a confusion matrix and various performance metrics. The
+confusion matrix provides a detailed breakdown of predicted and actual
+class memberships, allowing us to assess the model's strengths and
+weaknesses.
+
+The provided statistics by class include sensitivity, specificity,
+positive predictive value, negative predictive value, prevalence,
+detection rate, detection prevalence, and balanced accuracy for each
+class in a multi-class classification model.
+
+To address the issue of NA values, manual calculations can be performed,
+taking the average across all classes. the below code are the manual
+calculations for some key metrics:
+
+```{r 13,cache = TRUE}
+# Sensitivity, Specificity, Precision, and Accuracy values for each class
+sensitivity_values <- c(0.3370, 0.06122, 0.0000, 0.7048)
+specificity_values <- c(0.7492, 0.92744, 1.0000, 0.3548)
+precision_values <- c(0.2768, 0.20690, NaN, 0.2701)
+
+# Calculate averages
+average_sensitivity <- mean(sensitivity_values)
+average_specificity <- mean(specificity_values)
+average_precision <- mean(precision_values, na.rm = TRUE)
+
+# Display the results
+cat("Average Sensitivity:", average_sensitivity, "\n")
+cat("Average Specificity:", average_specificity, "\n")
+cat("Average Precision:", average_precision, "\n")
+accuracy <- co_result$overall["Accuracy"]
+cat("Accuracy:", accuracy, "\n")
+
+
+
+
+
+```
+
+The manually calculated averages provide a way to handle the NA values
+and offer insights into the overall performance of the model across all
+classes. It's important to consider these averages for a comprehensive
+evaluation of the model's effectiveness.
+
+### Model Performance Summary:
+
+-   Average Sensitivity: 27.6%
+
+-   Average Specificity: 75.8%
+
+-   Average Precision: 25.1%
+
+-   Accuracy: 26.7%
+
+**Observations:**
+
+1.  The model demonstrates varied sensitivity across different classes.
+2.  Challenges in Positive Predictive Value for Class 3.
+3.  Overall model accuracy affected by class imbalances.
+
+**the Accuracy of data split(70%,30%) using ID3 algorithm uning
+Ingormation gain equal 26.7%.**
+
+## Second tree splits the dataset into training (60%) and testing (40%) sets.
+
+```{r 23,cache = TRUE}
+
+selectedDataset$Baselinehistological.staging <- factor(selectedDataset$Baselinehistological.staging)
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(1:nrow(selectedDataset), size = 0.6 * nrow(selectedDataset), replace = FALSE)
+
+# Create training and testing sets
+trainingData <- selectedDataset[ind, ]
+testingData <- selectedDataset[-ind, ]
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+```
+
+```{r a,cache = TRUE}
+# Load the necessary libraries
+library(party)
+library(rpart)
+library(rpart.plot)
+
+# tree 1 for information gain
+# Using ID3 with rpart
+dataset.id3 <- rpart(myFormula, data = trainingData, method = "class", parms = list(split = "information"))
+printcp(dataset.id3)  # Display cp table for pruning
+
+```
+
+The code constructs a classification tree using the ID3 algorithm with
+the rpart package, focusing on information gain for node splitting. The
+printcp function is employed to reveal the complexity parameter (cp)
+table, offering valuable insights into potential tree pruning decisions.
+
+**Analysis of the Output:**
+
+-   The classification tree was built using ALT.1.
+
+-   The root node error, calculated as 608/828, results in a 73.43%
+    error rate, reflecting the misclassification at the initial node.
+
+-   The CP table provides information on relative error and xerror
+    (cross-validation error) for different complexity levels.
+
+-   Pruning decisions are crucial for optimizing the tree's
+    generalization to new data.
+
+-   The decreasing xerror with growing complexity suggests potential
+    improvement with deeper trees.
+
+.
+
+```{r 33,cache = TRUE}
+# Save the plot to a variable
+my_plot <- rpart.plot(dataset.id3, box.palette = "RdBu", branch.lty = 1, shadow.col = "gray", nn = TRUE, type = 2)
+# Plot the decision tree
+print(my_plot)
+
+```
+
+Rule 1: If the patient's ALT.1 level is less than -1.7, the decision
+tree predicts Stage 2 disease.
+
+Rule 2: If the patient's ALT.1 level is greater than or equal to -1.7
+and ALT.1 level is greater than or equal to -0.29, the decision tree
+predicts Stage 4 disease, else the decision tree predicts Stage 1
+disease
+
+```{r b,cache = TRUE}
+# Make predictions on the test set
+testPred <- predict(dataset.id3, newdata = testingData, type = "class")
+result <- table(testPred, testingData$Baselinehistological.staging)
+```
+
+Predictions are made on the test set using the ID3-based decision tree,
+and the results are tabulated for evaluation.
+
+```{r 43,cache = TRUE}
+# Evaluate the model:
+library(e1071)
+library(caret)
+
+co_result <- confusionMatrix(result)
+print(co_result)
+
+# Display sensitivity, specificity, precision, and accuracy
+sensitivity(as.table(co_result))
+specificity(as.table(co_result))
+precision(as.table(co_result))
+acc <- co_result$overall["Accuracy"]
+print(paste("Accuracy:", acc))
+
+```
+
+The decision tree uses the information gain measure to split the data at
+each node. The information gain is a measure of how much the uncertainty
+in the target variable is reduced by splitting the data on a given
+feature.
+
+This tree is a classification tree that is used to predict the
+Baselinehistological.staging of a The classification model has been
+evaluated using a confusion matrix and various performance metrics. The
+confusion matrix provides a detailed breakdown of predicted and actual
+class memberships, allowing us to assess the model's strengths and
+weaknesses.
+
+The provided statistics by class include sensitivity, specificity,
+positive predictive value, negative predictive value, prevalence,
+detection rate, detection prevalence, and balanced accuracy for each
+class in a multi-class classification model.
+
+To address the issue of NA values, manual calculations can be performed,
+taking the average across all classes. the below code are the manual
+calculations for some key metrics:
+
+```{r 53,cache = TRUE}
+# Sensitivity, Specificity, Precision, and Accuracy values for each class
+sensitivity_values <- c(0.41085 , 0.016129   , 0.0000   , 0.5857)
+specificity_values <- c(0.60142 , 0.979021   , 1.0000   , 0.4237)
+precision_values <- c(0.23874 , 0.181818, NaN, 0.2562)
+
+# Calculate averages
+average_sensitivity <- mean(sensitivity_values)
+average_specificity <- mean(specificity_values)
+average_precision <- mean(precision_values, na.rm = TRUE)
+
+
+# Display the results
+cat("Average Sensitivity:", average_sensitivity, "\n")
+cat("Average Specificity:", average_specificity, "\n")
+cat("Average Precision:", average_precision, "\n")
+accuracy <- co_result$overall["Accuracy"]
+cat("Accuracy:", accuracy, "\n")
+
+
+
+```
+
+The manually calculated averages provide a way to handle the NA values
+and offer insights into the overall performance of the model across all
+classes. It's important to consider these averages for a comprehensive
+evaluation of the model's effectiveness.
+
+### Model Performance Summary:
+
+-   Average Sensitivity: 25.3%
+
+-   Average Specificity: 75.1%
+
+-   Average Precision: 22.55%
+
+-   Accuracy: 24.77%
+
+**Observations:**
+
+1.  The model demonstrates varied sensitivity across different classes.
+2.  Challenges in Positive Predictive Value for Class 3.
+3.  Overall model accuracy affected by class imbalances.
+
+**the Accuracy of data split(60%,40%) using ID3 algorithm uning
+Ingormation gain algorithm equal 24.77%.**
+
+# Third tree splits the dataset into training (50%) and testing (50%) sets.
+
+```{r 63,cache = TRUE}
+
+selectedDataset$Baselinehistological.staging <- factor(selectedDataset$Baselinehistological.staging)
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(1:nrow(selectedDataset), size = 0.5 * nrow(selectedDataset), replace = FALSE)
+
+# Create training and testing sets
+trainingData <- selectedDataset[ind, ]
+testingData <- selectedDataset[-ind, ]
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+```
+
+```{r 73,cache = TRUE}
+# Load the necessary libraries
+library(party)
+library(rpart)
+library(rpart.plot)
+
+# tree 1 for information gain
+# Using ID3 with rpart
+dataset.id3 <- rpart(myFormula, data = trainingData, method = "class", parms = list(split = "information"))
+printcp(dataset.id3)  # Display cp table for pruning
+
+```
+
+The code constructs a classification tree using the ID3 algorithm with
+the rpart package, focusing on information gain for node splitting. The
+printcp function is employed to reveal the complexity parameter (cp)
+table, offering valuable insights into potential tree pruning decisions.
+
+**Analysis of the Output:**
+
+The provided output corresponds to a classification tree built using the
+ID3 algorithm with the rpart package, considering information gain for
+splitting nodes. Here's the analysis:
+
+Variables Used in Tree Construction: The tree is constructed based on
+the variable ALT.1.
+
+Root Node Error: The root node error is calculated as 505/690, resulting
+in a 73.19% error rate in the initial classification.
+
+Complexity Parameter (CP) Table:
+
+CP values represent the cost of adding complexity to the tree. For
+example, the CP value of 0.027723 at the first split indicates that
+further splits are considered if the improvement in accuracy justifies
+the added complexity. The CP table shows the relative error and
+cross-validation error (xerror) for different levels of complexity.
+
+Pruning Decision:
+
+The tree could potentially be pruned based on the CP values to find an
+optimal level of complexity. As the complexity increases, the xerror
+decreases, suggesting a potential improvement with a deeper tree.
+
+```{r 83,cache = TRUE}
+# Save the plot to a variable
+my_plot <- rpart.plot(dataset.id3, box.palette = "RdBu", branch.lty = 1, shadow.col = "gray", nn = TRUE, type = 2)
+# Plot the decision tree
+print(my_plot)
+
+```
+
+The decision tree uses the information gain measure to split the data at
+each node. The information gain is a measure of how much the uncertainty
+in the target variable is reduced by splitting the data on a given
+feature.
+
+Rule 1: If the patient's ALT.1 level is less than 0.14 , the decision
+tree predicts Stage 1 disease.
+
+Rule 2: If the patient's ALT.1 level is greater than or equal to 0.14
+and ALT.1 level is greater than or equal to 0.79, the decision tree
+predicts Stage 4 disease, else the decision tree predicts Stage 3
+disease
+
+```{r 93,cache = TRUE}
+# Make predictions on the test set
+testPred <- predict(dataset.id3, newdata = testingData, type = "class")
+result <- table(testPred, testingData$Baselinehistological.staging)
+```
+
+Predictions are made on the test set using the ID3-based decision tree,
+and the results are tabulated for evaluation.
+
+```{r 14,cache = TRUE}
+# Evaluate the model:
+library(e1071)
+library(caret)
+
+co_result <- confusionMatrix(result)
+print(co_result)
+
+# Display sensitivity, specificity, precision, and accuracy
+sensitivity(as.table(co_result))
+specificity(as.table(co_result))
+precision(as.table(co_result))
+acc <- co_result$overall["Accuracy"]
+print(paste("Accuracy:", acc))
+
+```
+
+This tree is a classification tree that is used to predict the
+Baselinehistological.staging of a The classification model has been
+evaluated using a confusion matrix and various performance metrics. The
+confusion matrix provides a detailed breakdown of predicted and actual
+class memberships, allowing us to assess the model's strengths and
+weaknesses.
+
+The provided statistics by class include sensitivity, specificity,
+positive predictive value, negative predictive value, prevalence,
+detection rate, detection prevalence, and balanced accuracy for each
+class in a multi-class classification model.
+
+To address the issue of NA values, manual calculations can be performed,
+taking the average across all classes. the below code are the manual
+calculations for some key metrics:
+
+```{r 24,cache = TRUE}
+# Sensitivity, Specificity, Precision, and Accuracy values for each class
+sensitivity_values <- c(0.5706, 0.0000, 0.1809, 0.23429)
+specificity_values <- c(0.4451, 1.0000, 0.8131, 0.73643)
+precision_values <- c(0.2409, NaN, 0.2656, 0.23164)
+
+
+# Calculate averages
+average_sensitivity <- mean(sensitivity_values)
+average_specificity <- mean(specificity_values)
+average_precision <- mean(precision_values, na.rm = TRUE)
+
+# Display the results
+cat("Average Sensitivity:", average_sensitivity, "\n")
+cat("Average Specificity:", average_specificity, "\n")
+cat("Average Precision:", average_precision, "\n")
+accuracy <- co_resultc$overall["Accuracy"]
+cat("Accuracy:", accuracy, "\n")
+
+
+```
+
+The manually calculated averages provide a way to handle the NA values
+and offer insights into the overall performance of the model across all
+classes. It's important to consider these averages for a comprehensive
+evaluation of the model's effectiveness.
+
+### Model Performance Summary:
+
+-   Average Sensitivity: 24.6%
+
+-   Average Specificity: 74.9%
+
+-   Average Precision: 24.6%
+
+-   Accuracy: 24.31%
+
+**Observations:**
+
+1.  The model demonstrates varied sensitivity across different classes.
+2.  Challenges in Positive Predictive Value for Class 2.
+3.  Overall model accuracy affected by class imbalances.
+
+**the Accuracy of data split(50%,50%) using ID3 algorithm uning
+Ingormation gain algorithm equal 24.31%.**
+
+### Comparison of the three different splitting of **ID3** algorithm
+
+```{r}
+library(knitr)
+
+# Sample data
+Table <- data.frame(
+  Algorithm = c( "70 %t raining set 30% testing set:", "60 %t raining set 40% testing set:", "50 %t raining set 50% testing set:"),
+  Accuracy = c("26.7%", "24.77%", "24.31%"),
+  Precision = c("25.1%", "22.55%", "24.6%"),
+  Sensitivity = c("27.6%", "25.3%", "24.6%"),
+  Specificity = c("75.8%", "75.1%", "74.9%")
+)
+
+# Display the table using kable
+kable(Table, format = "markdown", align = "c")
+
+```
+
+Based on these comparisons, the 70% training - 30% testing split
+generally demonstrates slightly better performance in terms of accuracy
+and specificity for the ID3 algorithm. However, as before, the choice of
+the best split depends on other considerations such as the available
+data and the specific goals of the model.
+
+# tree using the default method (C50) using G ration
+
+## First tree splits the dataset into training (70%) and testing (30%) sets.
+
+```{r 34,cache = TRUE}
+
+selectedDataset$Baselinehistological.staging <- factor(selectedDataset$Baselinehistological.staging)
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(1:nrow(selectedDataset), size = 0.7 * nrow(selectedDataset), replace = FALSE)
+
+# Create training and testing sets
+trainingData <- selectedDataset[ind, ]
+testingData <- selectedDataset[-ind, ]
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+
+```
+
+```{r 44,cache = TRUE}
+
+# Install and load the C50 package if not already installed
+#install.packages("C50")
+library(C50)
+library(partykit)
+library(party)
+# Using C4.5 (C5.0) with C50
+# Assuming your dataset is named 'myData'
+dataset.c45 <- C5.0(myFormula, data = trainingData, trials = 1, winnow = TRUE)
+
+# Print the tree rules
+summary(dataset.c45)
+
+
+# Make predictions on the test set
+testPreds <- predict(dataset.c45, newdata = testingData)
+results <- table(testPreds, testingData$Baselinehistological.staging)
+c45_party <- as.party(dataset.c45)
+
+
+# Plot the decision tree
+plot(dataset.c45, main = "Decision Tree (Limited Size)")
+```
+
+The code utilizes the C5.0 algorithm from the C50 package to build a
+decision tree for classification. It prints the tree rules, plots a
+limited-size version of the tree.
+
+**Output Analysis**
+
+The C5.0 decision tree, trained on the provided dataset, reveals key
+rules for predicting Baselinehistological.staging. Notably, Epigastric
+pain, ALT.1, Jaundice, Gender, and Nausea.Vomting are crucial
+attributes. The tree's evaluation on the training data shows a size of
+73 nodes with 53.4% misclassification. The primary attribute used is
+Epigastric pain, demonstrating its significance in the classification
+process.
+
+**Apologies for the complexity of the decision tree. and the extensive
+structure may pose challenges in interpretation.**
+
+```{r 54,cache = TRUE}
+# Evaluate the model
+co_results <- confusionMatrix(results)
+print(co_results)
+sensitivity(as.table(co_results))
+specificity(as.table(co_results))
+precision(as.table(co_results))
+accs <- co_results$overall["Accuracy"]
+print(paste("Accuracy:", accs))
+
+
+```
+
+This tree is a classification tree that is used to predict the
+Baselinehistological.staging of a The classification model has been
+evaluated using a confusion matrix and various performance metrics. The
+confusion matrix provides a detailed breakdown of predicted and actual
+class memberships, allowing us to assess the model's strengths and
+weaknesses.
+
+The provided statistics by class include sensitivity, specificity,
+positive predictive value, negative predictive value, prevalence,
+detection rate, detection prevalence, and balanced accuracy for each
+class in a multi-class classification model.
+
+To address the issue of NA values, manual calculations can be performed,
+taking the average across all classes. the below code are the manual
+calculations for some key metrics:
+
+```{r 64,cache = TRUE}
+# Sensitivity, Specificity, Precision, and Accuracy values for each class
+sensitivity_values <- c(0.34783, 0.16327, 0.15833, 0.4571)
+specificity_values <- c(0.67492, 0.81388, 0.88814, 0.6677)
+precision_values <- c(0.23358, 0.21333, 0.36538, 0.3179)
+
+
+# Calculate averages
+average_sensitivity <- mean(sensitivity_values)
+average_specificity <- mean(specificity_values)
+average_precision <- mean(precision_values, na.rm = TRUE)
+
+# Display the results
+cat("Average Sensitivity:", average_sensitivity, "\n")
+cat("Average Specificity:", average_specificity, "\n")
+cat("Average Precision:", average_precision, "\n")
+print(paste("Accuracy:", accs))
+
+
+```
+
+The manually calculated averages provide a way to handle the NA values
+and offer insights into the overall performance of the model across all
+classes. It's important to consider these averages for a comprehensive
+evaluation of the model's effectiveness.
+
+### Model Performance Summary:
+
+-   Average Sensitivity: 28.1%
+
+-   Average Specificity: 76.1%
+
+-   Average Precision: 28.2%
+
+-   Accuracy: 27.7%
+
+**Observations:**
+
+1.  The model exhibits varying sensitivity across different classes.
+2.  Positive Predictive Value is notably low for Class 2.
+3.  Balanced Accuracy indicates moderate overall model performance.
+
+**the Accuracy of data split(70%,30%) using (C50) G ration algorithm
+equal 27.7%.**
+
+## Second tree splits the dataset into training (60%) and testing (40%) sets.
+
+```{r 15,cache = TRUE}
+
+selectedDataset$Baselinehistological.staging <- factor(selectedDataset$Baselinehistological.staging)
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(1:nrow(selectedDataset), size = 0.6 * nrow(selectedDataset), replace = FALSE)
+
+# Create training and testing sets
+trainingData <- selectedDataset[ind, ]
+testingData <- selectedDataset[-ind, ]
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+
+```
+
+```{r 25,cache = TRUE}
+
+# Install and load the C50 package if not already installed
+#install.packages("C50")
+library(C50)
+library(partykit)
+library(party)
+# Using C4.5 (C5.0) with C50
+# Assuming your dataset is named 'myData'
+dataset.c45 <- C5.0(myFormula, data = trainingData, trials = 1, winnow = TRUE)
+
+# Print the tree rules
+summary(dataset.c45)
+
+
+# Make predictions on the test set
+testPreds <- predict(dataset.c45, newdata = testingData)
+results <- table(testPreds, testingData$Baselinehistological.staging)
+c45_party <- as.party(dataset.c45)
+
+
+# Plot the decision tree
+plot(dataset.c45, main = "Decision Tree (Limited Size)")
+```
+
+The code utilizes the C5.0 algorithm from the C50 package to build a
+decision tree for classification. It prints the tree rules, plots a
+limited-size version of the tree.
+
+**Output Analysis**
+
+The C5.0 decision tree was trained on medical data with five features,
+where ALT.1 was the most influential predictor. The tree identified
+distinct patterns related to gender, nausea/vomiting, jaundice, and
+epigastric pain, achieving an accuracy of 52.8%, but with a notable
+error rate of 47.2%. The primary attribute usage was ALT.1, followed by
+Nausea.Vomting, Gender, Jaundice, and Epigastric.pain.
+
+**Apologies for the complexity of the decision tree. and the extensive
+structure may pose challenges in interpretation.**
+
+```{r 35,cache = TRUE}
+# Evaluate the model
+co_results <- confusionMatrix(results)
+print(co_results)
+sensitivity(as.table(co_results))
+specificity(as.table(co_results))
+precision(as.table(co_results))
+accs <- co_results$overall["Accuracy"]
+print(paste("Accuracy:", accs))
+
+
+```
+
+This tree is a classification tree that is used to predict the
+Baselinehistological.staging of a The classification model has been
+evaluated using a confusion matrix and various performance metrics. The
+confusion matrix provides a detailed breakdown of predicted and actual
+class memberships, allowing us to assess the model's strengths and
+weaknesses.
+
+The provided statistics by class include sensitivity, specificity,
+positive predictive value, negative predictive value, prevalence,
+detection rate, detection prevalence, and balanced accuracy for each
+class in a multi-class classification model.
+
+To address the issue of NA values, manual calculations can be performed,
+taking the average across all classes. the below code are the manual
+calculations for some key metrics:
+
+```{r 45,cache = TRUE}
+# Sensitivity, Specificity, Precision, and Accuracy values for each class
+sensitivity_values <- c(0.28682, 0.14516, 0.18125, 0.24286)
+specificity_values <- c(0.70047, 0.80420, 0.78117, 0.66586)
+precision_values <- c(0.22561, 0.17647, 0.25217, 0.19767)
+
+
+# Calculate averages
+average_sensitivity <- mean(sensitivity_values)
+average_specificity <- mean(specificity_values)
+average_precision <- mean(precision_values, na.rm = TRUE)
+
+# Display the results
+cat("Average Sensitivity:", average_sensitivity, "\n")
+cat("Average Specificity:", average_specificity, "\n")
+cat("Average Precision:", average_precision, "\n")
+print(paste("Accuracy:", accs))
+
+
+```
+
+The manually calculated averages provide a way to handle the NA values
+and offer insights into the overall performance of the model across all
+classes. It's important to consider these averages for a comprehensive
+evaluation of the model's effectiveness.
+
+### Model Performance Summary:
+
+-   Average Sensitivity: 21.4%
+
+-   Average Specificity: 73.79%
+
+-   Average Precision: 21.29%
+
+-   Accuracy: 21.3%
+
+**Observations:**
+
+1.  The model displays diverse sensitivity levels among classes.
+2.  Class 2 has a notably low Positive Predictive Value.
+3.  Balanced Accuracy suggests a moderate overall model performance.
+
+**the Accuracy of data split(60%,40%) using (C50) G ration algorithm
+equal 21.3%.**
+
+## Third tree splits the dataset into training (50%) and testing (50%) sets.
+
+```{r 55,cache = TRUE}
+
+selectedDataset$Baselinehistological.staging <- factor(selectedDataset$Baselinehistological.staging)
+# Set the random seed for reproducibility
+set.seed(1234)
+
+ind <- sample(1:nrow(selectedDataset), size = 0.5 * nrow(selectedDataset), replace = FALSE)
+
+# Create training and testing sets
+trainingData <- selectedDataset[ind, ]
+testingData <- selectedDataset[-ind, ]
+myFormula <- Baselinehistological.staging ~ Gender + Epigastric.pain + Nausea.Vomting + ALT.1 + Jaundice 
+
+```
+
+```{r 65,cache = TRUE}
+
+# Install and load the C50 package if not already installed
+#install.packages("C50")
+library(C50)
+library(partykit)
+library(party)
+# Using C4.5 (C5.0) with C50
+# Assuming your dataset is named 'myData'
+dataset.c45 <- C5.0(myFormula, data = trainingData, trials = 1, winnow = TRUE)
+
+# Print the tree rules
+summary(dataset.c45)
+
+
+# Make predictions on the test set
+testPreds <- predict(dataset.c45, newdata = testingData)
+results <- table(testPreds, testingData$Baselinehistological.staging)
+c45_party <- as.party(dataset.c45)
+
+
+# Plot the decision tree
+plot(dataset.c45, main = "Decision Tree (Limited Size)")
+```
+
+The code utilizes the C5.0 algorithm from the C50 package to build a
+decision tree for classification. It prints the tree rules, plots a
+limited-size version of the tree.
+
+**Output Analysis**
+
+The decision tree, based on the C5.0 algorithm, was constructed to
+predict the 'Jaundice' attribute using 690 cases with five features. The
+tree identifies key attributes like 'ALT.1' and 'Gender' for
+classification. However, it exhibits a moderate size and error rate
+(52.8%), suggesting potential room for improvement in predictive
+accuracy
+
+**Apologies for the complexity of the decision tree. and the extensive
+structure may pose challenges in interpretation.**
+
+```{r 75,cache = TRUE}
+# Evaluate the model
+co_results <- confusionMatrix(results)
+print(co_results)
+sensitivity(as.table(co_results))
+specificity(as.table(co_results))
+precision(as.table(co_results))
+accs <- co_results$overall["Accuracy"]
+print(paste("Accuracy:", accs))
+
+
+```
+
+This tree is a classification tree that is used to predict the
+Baselinehistological.staging of a The classification model has been
+evaluated using a confusion matrix and various performance metrics. The
+confusion matrix provides a detailed breakdown of predicted and actual
+class memberships, allowing us to assess the model's strengths and
+weaknesses.
+
+The provided statistics by class include sensitivity, specificity,
+positive predictive value, negative predictive value, prevalence,
+detection rate, detection prevalence, and balanced accuracy for each
+class in a multi-class classification model.
+
+To address the issue of NA values, manual calculations can be performed,
+taking the average across all classes. the below code are the manual
+calculations for some key metrics:
+
+```{r 85,cache = TRUE}
+# Sensitivity, Specificity, Precision, and Accuracy values for each class
+sensitivity_values <- c(0.38037, 0.16970, 0.21809, 0.33714)
+specificity_values <- c(0.70265, 0.86122, 0.79920, 0.67054)
+precision_values <- c(0.28311, 0.27723, 0.28873, 0.25764)
+
+
+# Calculate averages
+average_sensitivity <- mean(sensitivity_values)
+average_specificity <- mean(specificity_values)
+average_precision <- mean(precision_values, na.rm = TRUE)
+
+# Display the results
+cat("Average Sensitivity:", average_sensitivity, "\n")
+cat("Average Specificity:", average_specificity, "\n")
+cat("Average Precision:", average_precision, "\n")
+print(paste("Accuracy:", accs))
+
+
+```
+
+The manually calculated averages provide a way to handle the NA values
+and offer insights into the overall performance of the model across all
+classes. It's important to consider these averages for a comprehensive
+evaluation of the model's effectiveness.
+
+### Model Performance Summary:
+
+-   Average Sensitivity: 27.63%
+
+-   Average Specificity: 75.84%
+
+-   Average Precision: 27.66%
+
+-   Accuracy: 27.5%
+
+**Observations:**
+
+1.  The model exhibits varying sensitivity levels across different
+    classes.
+2.  Positive Predictive Value is notably low for Class 2.
+3.  Balanced Accuracy indicates moderate overall model performance,
+    emphasizing the need for potential improvements.
+
+**the Accuracy of data split(50%,50%) using (C50) G ration algorithm
+equal 27.5%.**
+
+### Comparison of the three different splitting of **G ration algorithm**
+
+```{r}
+library(knitr)
+
+# Sample data
+Table <- data.frame(
+  Algorithm = c("70 %t raining set 30% testing set:", "60 %t raining set 40% testing set:", "50 %t raining set 50% testing set:"),
+  Accuracy = c(27.7, 21.3, 27.5),
+  Precision = c(28.2, 21.29, 27.66),
+  Sensitivity = c(28.1, 21.4, 27.63),
+  Specificity = c(76.1, 73.79, 75.84)
+)
+
+# Display the table using kable
+kable(Table, format = "markdown")
+```
+
+| 
+
+Based on these comparisons, the 70% training - 30% testing split
+generally demonstrates better performance across all metrics compared to
+the other splits. However, the choice of the best split depends on other
+considerations such as the available data and the specific goals of the
+model.
+
+### Final Result : Choosing the best algorithm in classification
+
+```{r}
+# Sample data
+Table <- data.frame(
+  Algorithm = c("70% training set 30% testing set ( CART algorithm )", "70% training set 30% testing set ( ID3 algorithm )", "70% training set 30% testing set ( G ration algorithm )"),
+  Accuracy = c("26.7%", "26.7%", "27.7%"),
+  Precision = c("25.1%", "25.1%", "28.2%"),
+  Sensitivity = c("27.6%", "27.6%", "28.1%"),
+  Specificity = c("75.8%", "75.8%", "76.1%")
+)
+
+# Display the table using kable
+kable(Table, format = "markdown", align = "c")
+
+```
+
+The **G ration** algorithm, implemented with a 70% training - 30%
+testing split, appears to be the most promising for this classification
+task. It shows competitive accuracy, precision, sensitivity, and
+specificity compared to the CART and ID3 algorithms. However, based on
+the provided metrics, the **G ration** algorithm with a 70-30 split is
+recommended.
+
+# Clustering Dataset
+
+The code performs K-means clustering on a dataset containing hepatitis C
+virus data from Egyptian patients. The goal is to segment the data into
+four distinct clusters based on various attributes. After running the
+K-means algorithm, the code displays essential information about the
+clustering process.
+
+#### First Cluster num_clusters \<- 4:
+
+```{r}
+# Install the cluster package if not already installed
+if (!requireNamespace("cluster", quietly = TRUE)) {
+  install.packages("cluster")
+}
+
+# Load the cluster package
+library(cluster)
+# Assuming 'originalDataset' is your original dataset
+selectedFeatures <- c("Gender", "Epigastric.pain", "Nausea.Vomting", "Jaundice", "ALT.1")
+
+# Create a new dataset with selected features and the class label
+selectedDataset <- dataset[, c(selectedFeatures, "Baselinehistological.staging"), drop = FALSE]
+
+# Print the structure of the selected dataset
+str(selectedDataset)
+
+# Data preprocessing: Select only numeric columns
+numeric_columns <- sapply(selectedDataset, is.numeric)
+selectedDataset_numeric <- selectedDataset[, numeric_columns]
+
+# Store column names
+column_names <- colnames(selectedDataset_numeric)
+
+# Scale the data
+selectedDataset_scaled <- scale(selectedDataset_numeric)
+
+# Set the number of clusters (you can change this as needed)
+num_clusters <- 4  # Different number of clusters
+
+# Run k-means clustering
+set.seed(1234)
+kmeans_result_selected <- kmeans(selectedDataset_scaled, num_clusters)
+
+# Print the clustering result
+print(kmeans_result_selected)
+
+# Calculate Average Silhouette Width
+silhouette_avg_selected <- silhouette(kmeans_result_selected$cluster, dist(selectedDataset_scaled))[, 3]
+cat("Average Silhouette Width:", mean(silhouette_avg_selected), "\n")
+
+# Calculate Total Within-Cluster Sum of Squares
+within_cluster_sum_of_squares_selected <- kmeans_result_selected$tot.withinss
+cat("Total Within-Cluster Sum of Squares:", within_cluster_sum_of_squares_selected, "\n")
+
+# Assuming 'cluster_assignments' is your cluster assignments and 'ground_truth_labels' is your ground truth labels
+# Modify attribute names according to your dataset
+my_cluster_assignments <- kmeans_result_selected$cluster  # Replace 'kmeans_result_selected$cluster' with your actual cluster assignments
+my_ground_truth_labels <- sample(1:2, nrow(selectedDataset), replace = TRUE)  # Example: Random ground truth labels
+
+# BCubed Metrics
+calculate_bcubed_metrics <- function(cluster_assignments, ground_truth_labels, epsilon = 1e-10) {
+  n <- length(cluster_assignments)
+  precision_sum <- recall_sum <- 0
+  
+  for (i in 1:n) {
+    cluster <- cluster_assignments[i]
+    label <- ground_truth_labels[i]
+    
+    same_category_same_cluster <- sum(ground_truth_labels[cluster_assignments == cluster] == label)
+    total_same_cluster <- sum(cluster_assignments == cluster)
+    total_same_category <- sum(ground_truth_labels == label)
+    
+    # Ensure numerator and denominator are not 0
+    precision_sum <- precision_sum + (same_category_same_cluster + epsilon) / (total_same_cluster + epsilon)
+    recall_sum <- recall_sum + (same_category_same_cluster + epsilon) / (total_same_category + epsilon)
+  }
+  
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+  
+  return(list(precision = precision, recall = recall))
+}
+
+# Calculate BCubed Metrics with your data
+my_metrics <- calculate_bcubed_metrics(my_cluster_assignments, my_ground_truth_labels)
+my_precision <- my_metrics$precision
+my_recall <- my_metrics$recall
+
+# Print the BCubed Precision and Recall
+cat("BCubed Precision:", my_precision, "\n")
+cat("BCubed Recall:", my_recall, "\n")
+
+# Visualize clustering using clusplot from the cluster package
+clusplot(selectedDataset_scaled, kmeans_result_selected$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+# Plot silhouette scores to find the optimal number of clusters
+silhouette_scores <- numeric(0)
+for (i in 2:10) {
+  kmeans_temp <- kmeans(selectedDataset_scaled, centers = i, nstart = 25)
+  silhouette_temp <- silhouette(kmeans_temp$cluster, dist(selectedDataset_scaled))[, 3]
+  silhouette_scores <- c(silhouette_scores, mean(silhouette_temp))
+}
+
+# Plot silhouette scores
+plot(2:10, silhouette_scores, type = "b", xlab = "Number of Clusters", ylab = "Average Silhouette Score")
+
+# Visualize clustering using clusplot from the cluster package (additional visualization)
+clusplot(selectedDataset_scaled, kmeans_result_selected$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+# Visualize clustering using clusplot from the cluster package for the original dataset
+clusplot(dataset, kmeans_result_selected$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+```
+
+The results are as follows:
+
+Cluster Sizes: The data is divided into four clusters, with each cluster
+having a different number of samples. The clusters are labeled as
+Cluster 1, Cluster 2, Cluster 3, and Cluster 4.
+
+Cluster Means: The code provides the mean values of each attribute
+within each cluster. These means help us understand the typical
+characteristics of each cluster. For example, it shows the average
+values of age, gender, BMI, fever, and other attributes for each
+cluster.
+
+Clustering Vector: The clustering vector assigns each data point to one
+of the four clusters. This helps visualize how individual data points
+are grouped into specific clusters.
+
+1.  **Average Silhouette Width: 0.5662659**
+
+    -   The silhouette width is a measure of how similar an object is to
+        its own cluster (cohesion) compared to other clusters
+        (separation). The range of the silhouette width is [-1, 1],
+        where a high value indicates that the object is well matched to
+        its own cluster and poorly matched to neighboring clusters. In
+        this case, a value of 0.5662659 suggests a relatively good
+        separation and cohesion of clusters.
+
+2.  **Total Within-Cluster Sum of Squares: 90.0303**
+
+    -   This is a measure of the compactness of the clusters. It
+        represents the sum of the squared distances between each data
+        point in a cluster and the centroid of that cluster. A lower
+        value indicates tighter and more compact clusters. In this case,
+        a value of 90.0303 suggests that the data points within each
+        cluster are relatively close to the centroid of their respective
+        clusters.
+
+3.  **BCubed Precision: 0.5016036**
+
+    -   BCubed Precision is a metric that evaluates the precision of the
+        clustering results. It measures how many data points that are in
+        the same cluster are also in the same class. A value of 1.0
+        would indicate perfect precision. In this case, a value of
+        0.5016036 suggests a moderate precision, meaning that about half
+        of the points in the same cluster share the same class.
+
+4.  **BCubed Recall: 0.2526844**
+
+    -   BCubed Recall is a metric that evaluates the recall of the
+        clustering results. It measures how many data points that are in
+        the same class are also in the same cluster. A value of 1.0
+        would indicate perfect recall. In this case, a value of
+        0.2526844 suggests a relatively low recall, meaning that only
+        about a quarter of the points in the same class are in the same
+        cluster.
+
+In summary, these metrics collectively provide insights into the quality
+of the clustering results. A high silhouette width and low
+within-cluster sum of squares indicate well-defined and compact
+clusters. The BCubed precision and recall values provide information
+about how well the clustering aligns with the actual classes.
+
+#### **Second Cluster num_clusters \<- 6:**
+
+```{r}
+# Assuming 'originalDataset' is your original dataset
+selectedFeatures <- c("Gender", "Epigastric.pain", "Nausea.Vomting", "Jaundice", "ALT.1")
+
+# Create a new dataset with selected features and the class label
+selectedDataset <- dataset[, c(selectedFeatures, "Baselinehistological.staging"), drop = FALSE]
+
+# Print the structure of the selected dataset
+str(selectedDataset)
+
+# Data preprocessing: Select only numeric columns
+numeric_columns <- sapply(selectedDataset, is.numeric)
+selectedDataset_numeric <- selectedDataset[, numeric_columns]
+
+# Store column names
+column_names <- colnames(selectedDataset_numeric)
+
+# Scale the data
+selectedDataset_scaled <- scale(selectedDataset_numeric)
+
+# Set the number of clusters (you can change this as needed)
+num_clusters <- 6  # Different number of clusters
+
+# Run k-means clustering
+set.seed(1234)
+kmeans_result_selected <- kmeans(selectedDataset_scaled, num_clusters)
+
+# Print the clustering result
+print(kmeans_result_selected)
+
+# Calculate Average Silhouette Width
+silhouette_avg_selected <- silhouette(kmeans_result_selected$cluster, dist(selectedDataset_scaled))[, 3]
+cat("Average Silhouette Width:", mean(silhouette_avg_selected), "\n")
+
+# Calculate Total Within-Cluster Sum of Squares
+within_cluster_sum_of_squares_selected <- kmeans_result_selected$tot.withinss
+cat("Total Within-Cluster Sum of Squares:", within_cluster_sum_of_squares_selected, "\n")
+
+# Assuming 'cluster_assignments' is your cluster assignments and 'ground_truth_labels' is your ground truth labels
+# Modify attribute names according to your dataset
+my_cluster_assignments <- kmeans_result_selected$cluster  # Replace 'kmeans_result_selected$cluster' with your actual cluster assignments
+my_ground_truth_labels <- sample(1:2, nrow(selectedDataset), replace = TRUE)  # Example: Random ground truth labels
+
+# BCubed Metrics
+calculate_bcubed_metrics <- function(cluster_assignments, ground_truth_labels, epsilon = 1e-10) {
+  n <- length(cluster_assignments)
+  precision_sum <- recall_sum <- 0
+  
+  for (i in 1:n) {
+    cluster <- cluster_assignments[i]
+    label <- ground_truth_labels[i]
+    
+    same_category_same_cluster <- sum(ground_truth_labels[cluster_assignments == cluster] == label)
+    total_same_cluster <- sum(cluster_assignments == cluster)
+    total_same_category <- sum(ground_truth_labels == label)
+    
+    # Ensure numerator and denominator are not 0
+    precision_sum <- precision_sum + (same_category_same_cluster + epsilon) / (total_same_cluster + epsilon)
+    recall_sum <- recall_sum + (same_category_same_cluster + epsilon) / (total_same_category + epsilon)
+  }
+  
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+  
+  return(list(precision = precision, recall = recall))
+}
+
+# Calculate BCubed Metrics with your data
+my_metrics <- calculate_bcubed_metrics(my_cluster_assignments, my_ground_truth_labels)
+my_precision <- my_metrics$precision
+my_recall <- my_metrics$recall
+
+# Print the BCubed Precision and Recall
+cat("BCubed Precision:", my_precision, "\n")
+cat("BCubed Recall:", my_recall, "\n")
+
+# Visualize clustering using clusplot from the cluster package
+clusplot(selectedDataset_scaled, kmeans_result_selected$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+# Plot silhouette scores to find the optimal number of clusters
+silhouette_scores <- numeric(0)
+for (i in 2:10) {
+  kmeans_temp <- kmeans(selectedDataset_scaled, centers = i, nstart = 25)
+  silhouette_temp <- silhouette(kmeans_temp$cluster, dist(selectedDataset_scaled))[, 3]
+  silhouette_scores <- c(silhouette_scores, mean(silhouette_temp))
+}
+
+# Plot silhouette scores
+plot(2:10, silhouette_scores, type = "b", xlab = "Number of Clusters", ylab = "Average Silhouette Score")
+
+# Visualize clustering using clusplot from the cluster package (additional visualization)
+clusplot(selectedDataset_scaled, kmeans_result_selected$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+# Visualize clustering using clusplot from the cluster package for the original dataset
+clusplot(dataset, kmeans_result_selected$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+```
+
+The provided code performs a clustering analysis using the k-means
+algorithm on a selected subset of features from a dataset.
+
+1.  **Average Silhouette Width: 0.5663067**
+
+    -   The silhouette width is a measure of how similar an object is to
+        its own cluster (cohesion) compared to other clusters
+        (separation). The range of the silhouette width is [-1, 1],
+        where a high value indicates that the object is well matched to
+        its own cluster and poorly matched to neighboring clusters. In
+        this case, a value of 0.5663067 suggests a relatively good
+        separation and cohesion of clusters.
+
+2.  **Total Within-Cluster Sum of Squares: 37.6716**
+
+    -   This is a measure of the compactness of the clusters. It
+        represents the sum of the squared distances between each data
+        point in a cluster and the centroid of that cluster. A lower
+        value indicates tighter and more compact clusters. In this case,
+        a value of 37.6716 suggests that the data points within each
+        cluster are relatively close to the centroid of their respective
+        clusters.
+
+3.  **BCubed Precision: 0.5023209**
+
+    -   BCubed Precision is a metric that evaluates the precision of the
+        clustering results. It measures how many data points that are in
+        the same cluster are also in the same class. A value of 1.0
+        would indicate perfect precision. In this case, a value of
+        0.5023209 suggests a moderate precision, meaning that about half
+        of the points in the same cluster share the same class.
+
+4.  **BCubed Recall: 0.1682521**
+
+    -   BCubed Recall is a metric that evaluates the recall of the
+        clustering results. It measures how many data points that are in
+        the same class are also in the same cluster. A value of 1.0
+        would indicate perfect recall. In this case, a value of
+        0.1682521 suggests a relatively low recall, meaning that only
+        about 17% of the points in the same class are in the same
+        cluster
+
+The code provides a comprehensive analysis of the clustering results,
+including evaluation metrics such as average silhouette width, total
+within-cluster sum of squares, BCubed precision, and BCubed recall. The
+introduction of noise allows for a more robust evaluation of the
+clustering algorithm's performance. The final BCubed metrics indicate
+how well the clustering aligns with the ground truth labels.
+
+#### Third Cluster num_clusters \<- 8:
+
+```{r}
+# Assuming 'originalDataset' is your original dataset
+selectedFeatures <- c("Gender", "Epigastric.pain", "Nausea.Vomting", "Jaundice", "ALT.1")
+
+# Create a new dataset with selected features and the class label
+selectedDataset <- dataset[, c(selectedFeatures, "Baselinehistological.staging"), drop = FALSE]
+
+# Print the structure of the selected dataset
+str(selectedDataset)
+
+# Data preprocessing: Select only numeric columns
+numeric_columns <- sapply(selectedDataset, is.numeric)
+selectedDataset_numeric <- selectedDataset[, numeric_columns]
+
+# Store column names
+column_names <- colnames(selectedDataset_numeric)
+
+# Scale the data
+selectedDataset_scaled <- scale(selectedDataset_numeric)
+
+# Set the number of clusters (you can change this as needed)
+num_clusters <- 8  # Different number of clusters
+
+# Run k-means clustering
+set.seed(1234)
+kmeans_result_selected <- kmeans(selectedDataset_scaled, num_clusters)
+
+# Print the clustering result
+print(kmeans_result_selected)
+
+# Calculate Average Silhouette Width
+silhouette_avg_selected <- silhouette(kmeans_result_selected$cluster, dist(selectedDataset_scaled))[, 3]
+cat("Average Silhouette Width:", mean(silhouette_avg_selected), "\n")
+
+# Calculate Total Within-Cluster Sum of Squares
+within_cluster_sum_of_squares_selected <- kmeans_result_selected$tot.withinss
+cat("Total Within-Cluster Sum of Squares:", within_cluster_sum_of_squares_selected, "\n")
+
+# Assuming 'cluster_assignments' is your cluster assignments and 'ground_truth_labels' is your ground truth labels
+# Modify attribute names according to your dataset
+my_cluster_assignments <- kmeans_result_selected$cluster  # Replace 'kmeans_result_selected$cluster' with your actual cluster assignments
+my_ground_truth_labels <- sample(1:2, nrow(selectedDataset), replace = TRUE)  # Example: Random ground truth labels
+
+# BCubed Metrics
+calculate_bcubed_metrics <- function(cluster_assignments, ground_truth_labels, epsilon = 1e-10) {
+  n <- length(cluster_assignments)
+  precision_sum <- recall_sum <- 0
+  
+  for (i in 1:n) {
+    cluster <- cluster_assignments[i]
+    label <- ground_truth_labels[i]
+    
+    same_category_same_cluster <- sum(ground_truth_labels[cluster_assignments == cluster] == label)
+    total_same_cluster <- sum(cluster_assignments == cluster)
+    total_same_category <- sum(ground_truth_labels == label)
+    
+    # Ensure numerator and denominator are not 0
+    precision_sum <- precision_sum + (same_category_same_cluster + epsilon) / (total_same_cluster + epsilon)
+    recall_sum <- recall_sum + (same_category_same_cluster + epsilon) / (total_same_category + epsilon)
+  }
+  
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+  
+  return(list(precision = precision, recall = recall))
+}
+
+# Calculate BCubed Metrics with your data
+my_metrics <- calculate_bcubed_metrics(my_cluster_assignments, my_ground_truth_labels)
+my_precision <- my_metrics$precision
+my_recall <- my_metrics$recall
+
+# Print the BCubed Precision and Recall
+cat("BCubed Precision:", my_precision, "\n")
+cat("BCubed Recall:", my_recall, "\n")
+
+# Visualize clustering using clusplot from the cluster package
+clusplot(selectedDataset_scaled, kmeans_result_selected$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+# Plot silhouette scores to find the optimal number of clusters
+silhouette_scores <- numeric(0)
+for (i in 2:10) {
+  kmeans_temp <- kmeans(selectedDataset_scaled, centers = i, nstart = 25)
+  silhouette_temp <- silhouette(kmeans_temp$cluster, dist(selectedDataset_scaled))[, 3]
+  silhouette_scores <- c(silhouette_scores, mean(silhouette_temp))
+}
+
+# Plot silhouette scores
+plot(2:10, silhouette_scores, type = "b", xlab = "Number of Clusters", ylab = "Average Silhouette Score")
+
+# Visualize clustering using clusplot from the cluster package (additional visualization)
+clusplot(selectedDataset_scaled, kmeans_result_selected$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+# Visualize clustering using clusplot from the cluster package for the original dataset
+clusplot(dataset, kmeans_result_selected$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+```
+
+1.  **Average Silhouette Width: 0.5369389**
+
+    -   The silhouette width measures how similar an object is to its
+        own cluster (cohesion) compared to other clusters (separation).
+        A higher value indicates better-defined clusters. In this case,
+        a value of 0.5369389 suggests a relatively good separation and
+        cohesion of clusters.
+
+2.  **Total Within-Cluster Sum of Squares: 24.44069**
+
+    -   This measure represents the sum of the squared distances between
+        each data point in a cluster and the centroid of that cluster.
+        It reflects the compactness of the clusters. A lower value
+        indicates tighter and more compact clusters. In this case, a
+        value of 24.44069 suggests that the data points within each
+        cluster are relatively close to the centroid of their respective
+        clusters.
+
+3.  **BCubed Precision: 0.5025277**
+
+    -   BCubed Precision is a metric that evaluates the precision of the
+        clustering results. It measures how many data points that are in
+        the same cluster are also in the same class. A value of 1.0
+        would indicate perfect precision. In this case, a value of
+        0.5025277 suggests a moderate precision, meaning that about half
+        of the points in the same cluster share the same class.
+
+4.  **BCubed Recall: 0.1300836**
+
+    -   BCubed Recall is a metric that evaluates the recall of the
+        clustering results. It measures how many data points that are in
+        the same class are also in the same cluster. A value of 1.0
+        would indicate perfect recall. In this case, a value of
+        0.1300836 suggests a relatively low recall, meaning that only
+        about 13% of the points in the same class are in the same
+        cluster.
+
+    -   In summary, the clustering seems to have moderate compactness
+        (Total Within-Cluster Sum of Squares), the average silhouette
+        width indicates reasonable cluster separation, and the BCubed
+        Precision and Recall suggest some agreement between the clusters
+        and ground truth labels, but the recall is relatively low.
+
+## **Comparison and Discussion:**
+
+|                                    | K=4       | K=6       | K=8       |
+|------------------------------------|-----------|-----------|-----------|
+| Average Silhouette width           | 0.5662659 | 0.5663067 | 0.5369389 |
+| total within-cluster sum of square | 90.0303   | 37.6716   | 24.44069  |
+| BCubed precision                   | 0.5016036 | 0.5023209 | 0.5025277 |
+| BCubed recall                      | 0.2526844 | 0.1682521 | 0.1300836 |
+
+-   All three cluster sizes exhibit good silhouette width, indicating
+    reasonable separation and cohesion.
+
+-   As K increases, the total within-cluster sum of squares decreases,
+    suggesting tighter clusters.
+
+-   BCubed precision remains moderate across different cluster sizes.
+
+-   BCubed recall is relatively low, indicating that the clustering may
+    not fully capture the class structure.
+
+    **Conclusion:**
+
+    **K=6** might be the best :
+
+-   **Silhouette Width:** The silhouette width measures how well-defined
+    the clusters are. K=6 had a good silhouette width, suggesting
+    reasonable separation and cohesion of clusters.
+
+-   **Total Within-Cluster Sum of Squares:** K=6 had a lower
+    within-cluster sum of squares compared to K=8, indicating relatively
+    tight and compact clusters.
+
+-   **BCubed Precision:** K=6 had a moderate precision, indicating that
+    about half of the points in the same cluster share the same class.
+
+-   **BCubed Recall:** K=6 had a higher recall compared to K=8, although
+    still relatively low.
+
+    # 7. Findings
+
+After a thorough exploration of the mining results using both clustering
+(K-means) and classification (Decision Tree), several key observations
+emerged:
+
+```         
+1. Classification Methods:
+```
+
+Evaluation included three classification methods: Random Forest, Support
+Vector Machine (SVM), k-Nearest Neighbors (k-NN). Decision Tree: Among
+the classification methods, the Decision Tree demonstrated accuracy and
+interpretability.
+
+
+
+
+-   Optimal Split:
+
+The 70% training - 30% testing split demonstrated superior performance
+across metrics.
+
+```{r}
+# Sample data
+Table <- data.frame(
+  Algorithm = c("70% Training - 30% Testing (CART)", "70% Training - 30% Testing (ID3)", "70% Training - 30% Testing (G ration)"),
+  Accuracy = c("26.7%", "26.7%", "27.7%"),
+  Precision = c("25.1%", "25.1%", "28.2%"),
+  Sensitivity = c("27.6%", "27.6%", "28.1%"),
+  Specificity = c("75.8%", "75.8%", "76.1%")
+)
+
+# Display the table using kable
+kable(Table, format = "markdown", align = "c")
+
+```
+
+-Final Recommendation:
+
+The G ration algorithm with a 70% training - 30% testing split is
+recommended for the Decision Tree model.
+
+```{r}
+# Choose a CRAN mirror (you can replace 'https://cloud.r-project.org' with a mirror URL of your choice)
+options(repos = c(CRAN = 'https://cloud.r-project.org'))
+
+# Now try installing the 'ggtext' package again
+install.packages('ggtext')
+install.packages("ggtext")
+
+library(ggplot2)
+library(ggtext)
+
+# Convert percentages to numeric values
+Table$Accuracy <- as.numeric(sub("%", "", Table$Accuracy))
+Table$Precision <- as.numeric(sub("%", "", Table$Precision))
+Table$Sensitivity <- as.numeric(sub("%", "", Table$Sensitivity))
+Table$Specificity <- as.numeric(sub("%", "", Table$Specificity))
+
+# Melt the data frame for better plotting
+library(reshape2)
+table_melted <- melt(Table, id.vars = "Algorithm")
+
+# Bar plot
+ggplot(table_melted, aes(x = Algorithm, y = value, fill = variable)) +
+  geom_bar(stat = "identity", position = "dodge", color = "black") +
+  labs(title = "Performance Metrics",
+       x = "Algorithm",
+       y = "Value") +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  theme_minimal() +
+  theme(legend.position = "top") +
+  geom_text(aes(label = sprintf("%.1f%%", value)), position = position_dodge(width = 0.9), vjust = -0.5)
+
+
+```
+
+-   Interpretation:
+
+Decision Trees offer interpretability, allowing stakeholders to gain a
+clear understanding of the factors influencing the model's predictions.
+In the context of the G ration algorithm with a 70% training - 30%
+testing split, the following key insights can be derived:
+
+Feature Importance: The Decision Tree analysis reveals the importance of
+different features in predicting the target variable. Features that
+appear higher in the tree structure contribute more significantly to the
+decision-making process.
+
+Accuracy and Precision: The chosen G ration algorithm demonstrates
+competitive accuracy, precision, sensitivity, and specificity. The
+accuracy metric reflects the overall correctness of the model, while
+precision highlights the model's ability to avoid false positives.
+
+Sensitivity and Specificity: Sensitivity, also known as recall, measures
+the model's capability to correctly identify positive instances.
+Specificity gauges the model's aptitude for correctly identifying
+negative instances. A balanced combination of sensitivity and
+specificity is crucial for a well-performing model.
+
+Model Robustness: The 70% training - 30% testing split is recommended
+based on the observed performance metrics. This split provides a balance
+between training and testing data, contributing to a robust model that
+generalizes well to unseen data.
+
+Decision Tree Visualization: To further aid interpretation,
+visualizations of the Decision Tree structure can be generated. These
+visual representations offer an intuitive view of the decision-making
+process, showcasing how input features lead to different outcomes.
+
+By delving into the interpretability of the Decision Tree model,
+stakeholders can make informed decisions based on the identified
+patterns and relationships within the data. This transparency is crucial
+for building trust in the model's predictions and facilitating
+actionable insights in real-world applications.
+
+Clustering (K-means):
+
+-Number of Clusters (K):
+
+The silhouette method and within-cluster sum of squares were used to
+determine the optimal number of clusters (K).
+
+```{r}
+# Plot silhouette scores to find the optimal number of clusters
+plot(2:10, silhouette_scores, type = "b", xlab = "Number of Clusters", ylab = "Average Silhouette Score")
+
+```
+
+```{r}
+# Install and load required packages
+if (!requireNamespace("kableExtra", quietly = TRUE)) {
+  install.packages("kableExtra")
+}
+
+library(kableExtra)
+library(ggplot2)
+ 
+# Summary table
+summary_df <- data.frame(
+  K = c(4, 6, 8),
+  Silhouette_Width = c(0.5662659, 0.5663067, 0.5369389),
+  Within_Cluster_SS = c(90.0303, 37.6716, 24.44069),
+  BCubed_Precision = c(0.5016036, 0.5023209, 0.5025277),
+  BCubed_Recall = c(0.5025277, 0.1682521, 0.1300836)
+)
+
+# Display the summary table using kableExtra
+table_kable <- summary_df %>%
+  kable(format = "markdown") %>%
+  kable_styling()
+
+# Plot for Silhouette Width
+silhouette_plot <- ggplot(summary_df, aes(x = K, y = Silhouette_Width)) +
+  geom_line() +
+  labs(title = "Silhouette Width for Different K Values",
+       x = "Number of Clusters (K)",
+       y = "Silhouette Width")
+
+# Print the table and plot
+cat("## Summary Table\n")
+print(table_kable)
+
+cat("\n## Silhouette Width Plot\n")
+print(silhouette_plot)
+
+
+```
+
+Silhouette Width Plot
+
+The plot shows that the silhouette width decreases as the number of clusters increases. This indicates that there is a point of diminishing returns when increasing the number of clusters. The silhouette width is highest for K=4, which is consistent with the results of the summary table.
+
+
+```{r}
+
+
+  # Install and load required packages
+
+if (!requireNamespace("kableExtra", quietly = TRUE)) {
+  install.packages("kableExtra")
+}
+
+library(kableExtra)
+library(ggplot2)
+ 
+# Summary table
+summary_df <- data.frame(
+  K = c(4, 6, 8),
+  Silhouette_Width = c(0.5662659, 0.5663067, 0.5369389),
+  Within_Cluster_SS = c(90.0303, 37.6716, 24.44069),
+  BCubed_Precision = c(0.5016036, 0.5023209, 0.5025277),
+  BCubed_Recall = c(0.5025277, 0.1682521, 0.1300836)
+)
+
+# Display the summary table using kableExtra
+table_kable <- summary_df %>%
+  kable(format = "markdown") %>%
+  kable_styling()
+
+# Plot for Within_Cluster_SS
+Within_Cluster_SS <- ggplot(summary_df, aes(x = K, y = Within_Cluster_SS)) +
+  geom_line() +
+  labs(title = "Within_Cluster_SS for Different K Values",
+       x = "Number of Clusters (K)",
+       y = "Within_Cluster_SS")
+
+# Print the table and plot
+cat("## Summary Table\n")
+print(table_kable)
+
+cat("\n## Within_Cluster_SS Plot\n")
+print(Within_Cluster_SS)
+
+```
+Within_cliuster_ss
+
+
+The elbow point in the plot is the point where the rate of decrease in the WCSS slows down. This is often used as a heuristic to determine the optimal number of clusters. the elbow point is at K=6. This suggests that the optimal number of clusters for the data is 6.
+
+
+
+
+```{r}
+
+# Install and load required packages
+if (!requireNamespace("kableExtra", quietly = TRUE)) {
+  install.packages("kableExtra")
+}
+
+library(kableExtra)
+library(ggplot2)
+ 
+# Summary table
+summary_df <- data.frame(
+  K = c(4, 6, 8),
+  Silhouette_Width = c(0.5662659, 0.5663067, 0.5369389),
+  Within_Cluster_SS = c(90.0303, 37.6716, 24.44069),
+  BCubed_Precision = c(0.5016036, 0.5023209, 0.5025277),
+  BCubed_Recall = c(0.5025277, 0.1682521, 0.1300836)
+)
+
+# Display the summary table using kableExtra
+table_kable <- summary_df %>%
+  kable(format = "markdown") %>%
+  kable_styling()
+
+# Plot for Within_Cluster_SS
+BCubed_Precision <- ggplot(summary_df, aes(x = K, y = BCubed_Precision)) +
+  geom_line() +
+  labs(title = "BCubed_Precision for Different K Values",
+       x = "Number of Clusters (K)",
+       y = "BCubed_Precision")
+
+# Print the table and plot
+cat("## Summary Table\n")
+print(table_kable)
+
+cat("\n## Within_Cluster_SS Plot\n")
+print(BCubed_Precision)
+```
+
+
+the elbow point in the plot is the point where the rate of increase in the BCubed precision and recall slows down. This is often used as a heuristic to determine the optimal number of clusters. the elbow point is at K=6. This suggests that the optimal number of clusters for the data is 6.
+
+
+
+```{r}
+
+# Install and load required packages
+if (!requireNamespace("kableExtra", quietly = TRUE)) {
+  install.packages("kableExtra")
+}
+
+library(kableExtra)
+library(ggplot2)
+ 
+# Summary table
+summary_df <- data.frame(
+  K = c(4, 6, 8),
+  Silhouette_Width = c(0.5662659, 0.5663067, 0.5369389),
+  Within_Cluster_SS = c(90.0303, 37.6716, 24.44069),
+  BCubed_Precision = c(0.5016036, 0.5023209, 0.5025277),
+  BCubed_Recall = c(0.5025277, 0.1682521, 0.1300836)
+)
+
+# Display the summary table using kableExtra
+table_kable <- summary_df %>%
+  kable(format = "markdown") %>%
+  kable_styling()
+
+# Plot for BCubed_Recall
+BCubed_Recall <- ggplot(summary_df, aes(x = K, y = BCubed_Recall)) +
+  geom_line() +
+  labs(title = "BCubed_Recall for Different K Values",
+       x = "Number of Clusters (K)",
+       y = "BCubed_Recall")
+
+# Print the table and plot
+cat("## Summary Table\n")
+print(table_kable)
+
+cat("\n## Within_Cluster_SS Plot\n")
+print(BCubed_Recall)
+```
+
+the elbow point in the plot is the point where the rate of increase in the BCubed precision and recall slows down. This is often used as a heuristic to determine the optimal number of clusters. the elbow point is at K=6. This suggests that the optimal number of clusters for the data is 6.
+
+
+```{r}
+library(ggplot2)
+
+# Create a data frame with the provided values
+summary_df <- data.frame(
+  K = c("K=4", "K=6", "K=8"),
+  Silhouette_Width = c(0.5662659, 0.5663067, 0.5369389),
+  Within_Cluster_SS = c(90.0303, 37.6716, 24.44069),
+  BCubed_Precision = c(0.5016036, 0.5023209, 0.5025277),
+  BCubed_Recall = c(0.2526844, 0.1682521, 0.1300836)
+)
+
+# Melt the data frame for better plotting
+library(reshape2)
+summary_melted <- melt(summary_df, id.vars = "K")
+
+# Bar plot
+ggplot(summary_melted, aes(x = K, y = value, fill = variable)) +
+  geom_bar(stat = "identity", position = "dodge", color = "black") +
+  labs(title = "Cluster Characteristics",
+       x = "Number of Clusters (K)",
+       y = "Value") +
+  theme_minimal() +
+  theme(legend.position = "top")
+
+
+
+```
+
+
+
+
+
+-Optimal Number of Clusters:
+
+Based on metrics (silhouette width, within-cluster sum of squares,
+BCubed Precision, BCubed Recall), K = 6 is recommended.
+
+
+
+Conclusion:
+
+clustering, especially K-Means with K=6. It's like a super detective that finds hidden patterns in our data, doing a better job than other methods. Picking clustering helps us see the bigger picture and make smarter decisions based on the real nature of our data.
+
+
+
+#  8. References
+
+[1] Online Resource: Center for Machine Learning and Intelligent
+Systems, University of California, Irvine. "Hepatitis C Virus (HCV)
+for Egyptian Patients Dataset." [Online]. Available:
+<http://archive.ics.uci.edu/dataset/503/hepatitis+c+virus+hcv+for+egyptian+patients>.
+
+[2] K. Mazidi, "Data Mining: Classification with Decision Trees." [Online]. Available: https://rpubs.com/kjmazidi/195428.
+
+[3] C. Guild, "Clustering Analysis in R using K-Means." [Online]. Available: https://rpubs.com/camguild/803096. [Accessed: August 28, 2021].
+```
+
+
